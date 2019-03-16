@@ -10,6 +10,8 @@ Resolutions in wand can be deviously tricky. You might think that it's just an i
 
 # Getting the Resolution
 
+
+
 ```
 from wand.image import Image
 with Image(filename='myfile.png') as image:

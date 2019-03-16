@@ -5,10 +5,16 @@ from __future__ import unicode_literals
 AUTHOR = 'charles'
 SITENAME = 'checkroth-site'
 SITEURL = ''
-
+SITEDESCRIPTION = 'My Blog'
+SITELOGO = ''
+FAVICON = ''
+BROWSER_COLOR = '#FFFFFF'
+THEME = 'Flex'
 PATH = 'content'
+PYGMENTS_STYLE = 'colorful'
 
 TIMEZONE = 'Japan'
+
 
 DEFAULT_LANG = 'en'
 
