@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 
 AUTHOR = 'charles'
 SITENAME = 'checkroth-site'
-SITEURL = ''
+SITEURL = '/'
 SITEDESCRIPTION = 'My Blog'
-SITELOGO = ''
+SITELOGO = 'https://avatars3.githubusercontent.com/u/1385951?s=460&v=4'
 FAVICON = ''
 BROWSER_COLOR = '#FFFFFF'
 THEME = 'Flex'
@@ -42,9 +42,11 @@ LINKS = (('Resume',
 
 
 # Social widget
-SOCIAL = (('github', 'https://www.github.com/Checkroth'),
+SOCIAL = (('envelope', 'mailto:checkroth@gmail.com'),
+          ('github', 'https://www.github.com/Checkroth'),
           ('linkedin', 'https://www.linkedin.com/in/charlesheckroth'),
           ('twitter', 'http://www.twitter.com/checkroth'),
+          ('stack-overflow', 'https://stackoverflow.com/users/1037971/charles'),
           )
 
 
@@ -55,6 +57,13 @@ MENUITEMS = (('Archives', '/archives.html'),
              ('Tags', '/tags.html'),)
 
 DEFAULT_PAGINATION = 10
+
+CC_LICENSE = {
+    'name': 'Creative Commons Attribution-ShareAlike',
+    'version': '4.0',
+    'slug': 'by-sa'
+}
+COPYRIGHT_YEAR = 2019
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
