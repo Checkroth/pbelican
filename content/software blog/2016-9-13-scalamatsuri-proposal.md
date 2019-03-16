@@ -1,6 +1,5 @@
 Title: Roping in Complexity, Decay, and Duplication in a Growing Scala Project
 Date: 2016-09-13
-Category: blog
 Tags: scala, conference, scalamatsuri
 Slug: 2017-scala-matsuri-cfp
 Authors: Charles Heckroth

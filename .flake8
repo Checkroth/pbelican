@@ -1,0 +1,10 @@
+[flake8]
+max-line-length = 100
+max-complexity = 10
+radon-max-cc = 10
+import-order-style = google
+extend-ignore = I100, I101,
+
+## flake8-import-order
+;I100 Imports statements are in the wrong order. import socket should be before import sys
+;I101 Imported names are in the wrong order. Should be migrations, models
