@@ -5,6 +5,7 @@ Tags: python, wand, pdf
 Slug: wand-resolutions
 Authors: Charles Heckroth
 Summary: How to handle image resolutions in wand and common pitfalls
+Status: Draft
 
 Resolutions in wand can be deviously tricky. You might think that it's just an integer (or a tuple), but there are some non-obvious components to this setting.
 

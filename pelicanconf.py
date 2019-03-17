@@ -81,3 +81,7 @@ CUSTOM_CSS = 'static/custom.css'
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
+
+# External Service Mixins
+GOOGLE_ANALYTICS = 'UA-136401999-1'
+DISQUS_SITENAME = 'checkroth'

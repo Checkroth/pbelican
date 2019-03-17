@@ -14,7 +14,7 @@ I intend to fill this blog with notes about things I learn while working, and pr
 
 # About this Site
 
-This site is statically generated with [Pelican](https://docs.getpelican.com/en/stable/). I previously had a website made with scala and compiled with ammonite found [here](https://github.com/Checkroth/scalablog), but it was too much work to maintain to be worth it.
+This site is statically generated with [Pelican](https://docs.getpelican.com/en/stable/). I previously had a generated static website made with scala and compiled with ammonite found [here](https://github.com/Checkroth/scalablog), but it was too much trouble to maintain and improve to be worth it.
 
 The theme is [Flex](https://github.com/alexandrevicenzi/Flex) with [a few minor modifications](https://github.com/Checkroth/pbelican/blob/master/content/extra/custom.css) (colorscheme and minor layout changes).
 
