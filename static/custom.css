@@ -50,8 +50,9 @@ a.btn:hover {
 @media screen and (min-width: 768px) {
 	aside {
 		max-width: 20%;
-		min-width: 10em;
+		min-width: 11em;
 		z-index: 1;
+		overflow-x: hidden;
 	}
 	main {
 		width: 79%;
