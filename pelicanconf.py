@@ -9,7 +9,7 @@ SITEDESCRIPTION = 'My Blog'
 SITETITLE = 'Charles Henry Heckroth'
 SITESUBTITLE = 'My Notes & Blog'
 # SITELOGO = 'https://avatars3.githubusercontent.com/u/1385951?s=460&v=4'e
-SITELOGO = 'images/me.jpg'
+SITELOGO = '/images/me.jpg'
 FAVICON = ''
 BROWSER_COLOR = '#FFFFFF'
 THEME = 'Flex'

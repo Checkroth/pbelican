@@ -1,3 +1,53 @@
+/**
+primary-onyx: #34403A
+secondary-columbiablue: #C4D7F2
+tertiary-burnishedbrown: #A37B73
+
+others-whitesmoke: #F3F7F2
+others-honeydew: #FOF7EE
+others-powderedblue: #AFDEDC
+**/
+
+/* General color scheme overrides */
+body {
+	background-color: #F3F7F2;
+}
+
 a {
-	'color': 'green';
+	color: #A37B73;
+}
+
+a:hover {
+	color: #AFDEDC;
+}
+
+aside {
+	background-color: #34404A;
+}
+
+
+a.btn {
+	background-color: #A37B73;
+	color: #F3F7F2;
+}
+
+a.btn:hover {
+	background-color: #AFDEDC;
+	color: #A37B73;
+}
+
+/* resizing elements to make aside slimmer on desktop view*/
+@media screen and (min-width: 768px) {
+	aside {
+		max-width: 20%;
+		min-width: 10em;
+		z-index: 1;
+	}
+	main {
+		width: 79%;
+		left: 21%;
+	}
+	nav {
+		z-index: 0;
+	}
 }
