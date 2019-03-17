@@ -38,7 +38,8 @@ AUTHOR_FEED_RSS = None
 USE_FOLDER_AS_CATEGORY = True
 
 # Blogroll
-LINKS = (('Resume',
+LINKS = (('Blog', '/blog_index.html'),
+         ('Resume',
           'https://drive.google.com/file/d/0B2kTdZ0fBWzhaHBUOFlzYjNrRjg/view?usp=sharing'),
          ('BeProud', 'https://beproud.jp'),
          )
@@ -54,8 +55,11 @@ SOCIAL = (('envelope', 'mailto:checkroth@gmail.com'),
 
 
 # Local site links
+HOME_HIDE_TAGS = False
+INDEX_SAVE_AS = 'blog_index.html'
 MAIN_MENU = True
-MENUITEMS = (('Archives', '/archives.html'),
+MENUITEMS = (('Blog', '/blog_index.html'),
+             ('Archives', '/archives.html'),
              ('Categories', '/categories.html'),
              ('Tags', '/tags.html'),)
 

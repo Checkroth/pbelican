@@ -36,6 +36,16 @@ a.btn:hover {
 	color: #A37B73;
 }
 
+.tag-cloud a {
+	background-color: #A37B73;
+	color: #F3F7F2;
+}
+
+.tag-cloud a:hover {
+	background-color: #AFDEDC;
+	color: #A37B73;
+}
+
 /* resizing elements to make aside slimmer on desktop view*/
 @media screen and (min-width: 768px) {
 	aside {
