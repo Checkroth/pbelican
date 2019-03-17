@@ -40,8 +40,8 @@ USE_FOLDER_AS_CATEGORY = True
 # Blogroll
 LINKS = (('Blog', '/blog_index.html'),
          ('Resume',
-          'https://drive.google.com/file/d/0B2kTdZ0fBWzhaHBUOFlzYjNrRjg/view?usp=sharing'),
-         ('BeProud', 'https://beproud.jp'),
+          'https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view'),
+         ('BeProud', 'https://www.beproud.jp'),
          )
 
 
