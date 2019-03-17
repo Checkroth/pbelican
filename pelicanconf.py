@@ -4,9 +4,12 @@ from __future__ import unicode_literals
 
 AUTHOR = 'charles'
 SITENAME = 'checkroth-site'
-SITEURL = '/'
+SITEURL = ''
 SITEDESCRIPTION = 'My Blog'
-SITELOGO = 'https://avatars3.githubusercontent.com/u/1385951?s=460&v=4'
+SITETITLE = 'Charles Henry Heckroth'
+SITESUBTITLE = 'My Notes & Blog'
+# SITELOGO = 'https://avatars3.githubusercontent.com/u/1385951?s=460&v=4'e
+SITELOGO = 'images/me.jpg'
 FAVICON = ''
 BROWSER_COLOR = '#FFFFFF'
 THEME = 'Flex'
@@ -19,7 +22,7 @@ TIMEZONE = 'Japan'
 I18N_TEMPLATES_LANG = 'en'
 DEFAULT_LANG = 'en'
 OG_LOCALE = 'en_US'
-LOCALE = 'en_US'
+LOCALE = 'en_US.UTF-8'
 
 DATE_FORMATS = {
     'en': '%B %d, %Y',
@@ -64,6 +67,13 @@ CC_LICENSE = {
     'slug': 'by-sa'
 }
 COPYRIGHT_YEAR = 2019
+
+
+STATIC_PATHS = ['extra', 'images']
+EXTRA_PATH_METADATA = {
+    'extra/custom.css': {'path': 'static/custom.css'}
+}
+CUSTOM_CSS = 'static/custom.css'
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
