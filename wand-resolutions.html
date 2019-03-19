@@ -48,10 +48,10 @@
 <meta name="keywords" content="python, python-wand, pdf">
 
 <meta property="og:site_name" content="checkroth-site"/>
-<meta property="og:title" content="Dealing with Resolutions in Wand"/>
+<meta property="og:title" content="Working with ImageMagick&#39;s Wand Python Library"/>
 <meta property="og:description" content="Handling Wand Resolutions, Units, and Image Types"/>
 <meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="/drafts/wand-resolutions.html"/>
+<meta property="og:url" content="/wand-resolutions.html"/>
 <meta property="og:type" content="article"/>
 <meta property="article:published_time" content="2019-03-19 00:00:00+09:00"/>
 <meta property="article:modified_time" content=""/>
@@ -62,7 +62,7 @@
 <meta property="article:tag" content="pdf"/>
 <meta property="og:image" content="/images/me.jpg">
 
-  <title>checkroth-site &ndash; Dealing with Resolutions in Wand</title>
+  <title>checkroth-site &ndash; Working with ImageMagick&#39;s Wand Python Library</title>
 
 </head>
 <body>
@@ -132,7 +132,7 @@
 <article class="single">
   <header>
       
-    <h1 id="wand-resolutions">Dealing with Resolutions in Wand</h1>
+    <h1 id="wand-resolutions">Working with ImageMagick's Wand Python Library</h1>
     <p>
           Posted on March 19, 2019 in <a href="/category/blog.html">blog</a>
 
@@ -171,16 +171,16 @@
 <h1>Dealing with PDFs</h1>
 <h2>PDF Resolutions</h2>
 <p>The first thing to note with a PDF is that wand will <em>not</em> open it in its original resolution.</p>
-<div class="highlight"><pre><span></span>with Image(filename=&#39;pdf.pdf&#39;) as image:
-    image.resolution
-&gt;&gt; (72, 72)
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;pdf.pdf&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">image</span><span class="p">:</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">resolution</span>
+<span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">72</span><span class="p">,</span> <span class="mi">72</span><span class="p">)</span>
 </pre></div>
 
 
 <p>A PDF opened in wand will always be at a resolution of 72. A PDF <em>created</em> in wand will <em>also</em> always have a resolution of 72. If you want to do any remotely complex image processing on a PDF with Wand, you must always specify a resolution or you will run in to a lot of issues. The biggest being that every time you open and save the PDF, its quality will reduce dramatically (if its original resolution was greater than the default 72).</p>
-<div class="highlight"><pre><span></span>with Image(filename=&#39;pdf.pdf&#39;, resolution=200) as image:
-    image.resolution
-&gt;&gt; (200, 200)
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;pdf.pdf&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span> <span class="k">as</span> <span class="n">image</span><span class="p">:</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">resolution</span>
+<span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
 </pre></div>
 
 
@@ -188,32 +188,32 @@
 <p>Creating a new pdf works the same, which can actually be quite confusing.</p>
 <h2>Wand-created PDF Resolutions</h2>
 <p>Say you want to create a new PDF. You want it to be in Letter size, so you program assuming the PDF is at the default resolution, and then scale all of your widths, heights, and coordinates up to your system-wide resolution.</p>
-<div class="highlight"><pre><span></span>with Image(width=500, height=500) as image:
-    image.save(filename=&#39;test_pdf.pdf&#39;)
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span> <span class="k">as</span> <span class="n">image</span><span class="p">:</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;test_pdf.pdf&#39;</span><span class="p">)</span>
 
-with Image(filename=&#39;test_pdf.pdf&#39;, resolution=200) as i:
-    i.width, i.height
+<span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;test_pdf.pdf&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span> <span class="k">as</span> <span class="n">i</span><span class="p">:</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">height</span>
 
-&gt;&gt; (1389, 1389)
+<span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">1389</span><span class="p">,</span> <span class="mi">1389</span><span class="p">)</span>
 </pre></div>
 
 
 <p>If you're scaling your sizes and positions when creating your pdf, re-opening at the resolution you have specified is going to explode its size significantly.</p>
-<div class="highlight"><pre><span></span>with Image(width=500, height=500) as image:
-    image.resolution = 200
-    image.save(filename=&#39;test_pdf.pdf&#39;)
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span> <span class="k">as</span> <span class="n">image</span><span class="p">:</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;test_pdf.pdf&#39;</span><span class="p">)</span>
 
 
-with Image(filename=&#39;test_pdf.pdf&#39;, resolution=200):
-    i.width, i.height
+<span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;test_pdf.pdf&#39;</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+    <span class="n">i</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">height</span>
 
-&gt;&gt; (500, 500)
+<span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 </pre></div>
 
 
 <p>It is important to specify the resolution <em>before</em> saving the PDF or doing any drawing operations.</p>
 <p>It is also important to note that creating a new PDF at a certain resolution will <em>not</em> work if you pass the resolution in the constructor. I'm not really sure why, but the above code will work while <code>Image(width=500, height=500, resolution=200)</code> will reproduce the original resolution explosion issue.</p>
-<h2>PDF Units</h2>
+<h1>Image Units</h1>
 <p>Wand has three units of measurement.</p>
 <ul>
 <li><code>undefined</code></li>
@@ -222,25 +222,25 @@ with Image(filename=&#39;test_pdf.pdf&#39;, resolution=200):
 </ul>
 <p>PDFs are undefined by default. They don't hold the metadata like a <code>png</code>, <code>tiff</code>, etc. What <code>undefined</code> means is determined by ImageMagick itself, which probably references something in the operating system.</p>
 <p>In my personal experience, <code>undefined</code> has always calculated as <code>pixelsperinch</code>, but it may be different on other operating systems or environments. It's best to specify a system-wide unit and use it whenever you open an image.</p>
-<h3>Magic Units</h3>
+<h2>Magic Units</h2>
 <p>I used magic units for some time (leaving everything as <code>undefined</code>). Then one day, we decided to change our Twilio settings to send us images as Tiffs instead of PDFs.</p>
 <p>As it turns out, Tiff actually has the unit metadata, and it was set to <code>pixelspercentimeter</code>. Everything we received after that change was completely incorrectly processed because we had until that point processed everything as <code>undefined</code> or <code>pixelsperinch</code>.</p>
 <h1>Pitfall: Resizing</h1>
 <p>Resizing very handy. Especially in the previous example of receiving Tiffs from Twilio.</p>
 <p>A fun side-note: Faxes can be sent with different quality levels: Normal, Fine, and Superfine. These qualities actually only increase the vertical axis. When twilio sends you a PDF it transforms it to its intended aspect ratio for you, but a Tiff is the raw data. Normal will be flag, Fine will be the right ratio, and Superfine will be incredibly tall.</p>
 <p>To deal with this, I had to resize the Tiff before saving it so we could process it normally. For instance, for a <code>normal</code> quality fax:</p>
-<div class="highlight"><pre><span></span>with Image(filename=&#39;received.tiff) as image:
-    image.resize(image.width * 2, image.height)
-    image.save(filename=&#39;resized_image.tiff&#39;)
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;received.tiff) as image:</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;resized_image.tiff&#39;</span><span class="p">)</span>
 </pre></div>
 
 
 <p>The problem here is that resizing an image in wand has no impact on its resolution.</p>
 <p>Meaning, if you had a resolution of <code>(100, 200)</code> and resized it as specified above, the resolution will not become <code>(200, 200)</code>, but remain the same. Then the next time you open it, things are going to get <em>really weird</em>.</p>
-<div class="highlight"><pre><span></span>with Image(filename=&#39;received.tiff) as image:
-    image.resize(image.width * 2, image.height)
-    image.resolution = (image.resolution[0] * 2, image.resolution[1])
-    image.save(filename=&#39;resized_image.tiff&#39;)
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;received.tiff) as image:</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;resized_image.tiff&#39;</span><span class="p">)</span>
 </pre></div>
 
 
@@ -250,10 +250,10 @@ with Image(filename=&#39;test_pdf.pdf&#39;, resolution=200):
 <p>Wand images have a <code>sequence</code> attribute, which is crucial.</p>
 <p>You might think that if you do <code>draw(image)</code> with wand, you would write on the first page of the PDF. It will draw it on the last page.</p>
 <p>Wand has an <code>index_context</code> to deal with this:</p>
-<div class="highlight"><pre><span></span># assuming your draw attribute is created already
-with Image(filename=&#39;pdf.pdf&#39;) as image:
-    with image.sequence.index_context(0):
-        draw(image)
+<div class="highlight"><pre><span></span><span class="c1"># assuming your draw attribute is created already</span>
+<span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;pdf.pdf&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">image</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">image</span><span class="o">.</span><span class="n">sequence</span><span class="o">.</span><span class="n">index_context</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
 </pre></div>
 
 
@@ -267,14 +267,14 @@ with Image(filename=&#39;pdf.pdf&#39;) as image:
 <p>You can't write on a CMYK colorspace. If you try, you'll write on a different layer. White will become black and black will become white, and other things will become other things. It's a huge headache.</p>
 <p>My advice is to turn around and quit as soon as you see CMYK, but that's obviously not an option all the time.</p>
 <p>To deal with CMYK, the best you can do is something like this:</p>
-<div class="highlight"><pre><span></span>with Image(filename=&#39;cmyk_pdf.pdf&#39;) as image:
-    original_colorspace = image.colorspace
-    if original_colorspace = &#39;cmyk&#39;:
-        with image.sequence.index_context(0):  # or whatever page / pages you&#39;re processing
-            image.transform_colorspace(&#39;srgb&#39;)
-    draw(image)  # do all your drawing now
-    image.transform_colorspace(original_colorspace)
-    image.save(&#39;cmyk_drawn_pdf.pdf&#39;)
+<div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">Image</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s1">&#39;cmyk_pdf.pdf&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">image</span><span class="p">:</span>
+    <span class="n">original_colorspace</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">colorspace</span>
+    <span class="k">if</span> <span class="n">original_colorspace</span> <span class="o">=</span> <span class="s1">&#39;cmyk&#39;</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">image</span><span class="o">.</span><span class="n">sequence</span><span class="o">.</span><span class="n">index_context</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>  <span class="c1"># or whatever page / pages you&#39;re processing</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">transform_colorspace</span><span class="p">(</span><span class="s1">&#39;srgb&#39;</span><span class="p">)</span>
+    <span class="n">draw</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>  <span class="c1"># do all your drawing now</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">transform_colorspace</span><span class="p">(</span><span class="n">original_colorspace</span><span class="p">)</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;cmyk_drawn_pdf.pdf&#39;</span><span class="p">)</span>
 </pre></div>
 
 
@@ -288,14 +288,8 @@ with Image(filename=&#39;pdf.pdf&#39;) as image:
 <p>1: I am not primarily an engineer who deals with images, so some of my understanding could be wrong (the code works,  but the underlying reasons could be different from my current understanding)</p>
 <p>2: I mention scaling a few times. </p>
 <p>I generally scale positions and sizes with <code>math.floor(value * (SYSTEM_RESOLUTION / IMPLEMENTATION_RESOLUTION))</code>, where <code>SYSTEM_RESOLUTION</code> is the resolution you want, <code>IMPLEMENTATION_RESOLUTION</code> is whatever resolution you assumed when writing the code, and <code>value</code> is the value you want to scale.</p>
-<ol>
-<li>
-<p>Making an new image: I generally call this a <code>canvas</code>, and its important to specify the background color if you're going to be creating some sort of business document with the <code>background</code> parameter to the <code>Image</code> constructor.</p>
-</li>
-<li>
-<p>Wand uses ImageMagick to process everything, so outside of the wand version (I'm using <code>0.4.4</code>), your operating system and ImageMagick version could also make things work differently.</p>
-</li>
-</ol>
+<p>3: Making an new image: I generally call this a <code>canvas</code>, and its important to specify the background color if you're going to be creating some sort of business document with the <code>background</code> parameter to the <code>Image</code> constructor.</p>
+<p>4: Wand uses ImageMagick to process everything, so outside of the wand version (I'm using <code>0.4.4</code>), your operating system and ImageMagick version could also make things work differently.</p>
   </div>
   <div class="tag-cloud">
     <p>
