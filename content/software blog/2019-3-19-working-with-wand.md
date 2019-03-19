@@ -2,7 +2,7 @@ Title: Working with ImageMagick's Wand Python Library
 Date: 2019-03-19
 Category: blog
 Tags: python, python-wand, pdf
-Slug: wand-resolutions
+Slug: working-with-wand
 Authors: Charles Heckroth
 Summary: Handling Wand Resolutions, Units, and Image Types
 
