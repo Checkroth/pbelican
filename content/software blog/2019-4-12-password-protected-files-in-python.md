@@ -134,11 +134,11 @@ with open(full_path, 'rb') as office_in:
     except Exception:
         # xls files only:
         # msoffcrypto will throw a generic Exception on load_key if the file isn't encrypted
-        raise 'not encrypted'
+        return 'not encrypted'
 
     if not office_file.is_encrypted():
         # Other than xls files, you can check if a file is encrypted with the .is_encrypted function
-        raise 'not encrypted'
+        return 'not encrypted'
 
     # Open your desired output as a file
     with open(out_path, 'wb') as office_out:
@@ -148,7 +148,7 @@ with open(full_path, 'rb') as office_in:
         except error:
             # Office 97~2003 Only: These files aren't supported yet.
             # If the password is CORRECT, msoffcrypto will through a generic 'error'
-            raise 'encrypted, but decryption not supported'
+            return 'encrypted, but decryption not supported'
         except Exception:
             # Finally, msoffcrypto will throw a generic Exception on decrypt if the password is wrong
             return 'wrong password
