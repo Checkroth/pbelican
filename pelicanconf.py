@@ -75,7 +75,8 @@ COPYRIGHT_YEAR = 2019
 
 STATIC_PATHS = ['extra', 'images']
 EXTRA_PATH_METADATA = {
-    'extra/custom.css': {'path': 'static/custom.css'}
+    'extra/custom.css': {'path': 'static/custom.css'},
+    'extra/CNAME': {'path': 'CNAME'},
 }
 CUSTOM_CSS = 'static/custom.css'
 
