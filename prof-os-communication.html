@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <title>checkroth-site - Professional Open-Source Communication</title>
+        <meta charset="utf-8" />
+
+
+
+
+    <meta name="tags" content="github" />
+    <meta name="tags" content="opensource" />
+    <meta name="tags" content="communication" />
+
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">checkroth-site <strong>My Notes & Blog</strong></a></h1>
+        </header><!-- /#banner -->
+        <nav id="menu"><ul>
+            <li><a href="/blog_index.html">Blog</a></li>
+            <li><a href="/archives.html">Archives</a></li>
+            <li><a href="/categories.html">Categories</a></li>
+            <li><a href="/tags.html">Tags</a></li>
+            <li><a href="/">About Me</a></li>
+            <li class="active"><a href="/category/blog.html">blog</a></li>
+            <li><a href="/category/software-blog.html">software blog</a></li>
+        </ul></nav><!-- /#menu -->
+<section id="content" class="body">
+  <header>
+    <h2 class="entry-title">
+      <a href="/prof-os-communication.html" rel="bookmark"
+         title="Permalink to Professional Open-Source Communication">Professional Open-Source Communication</a></h2>
+ 
+  </header>
+  <footer class="post-info">
+    <time class="published" datetime="2019-08-28T00:00:00+09:00">
+      August 28, 2019
+    </time>
+    <address class="vcard author">
+      By           <a class="url fn" href="/author/charles-heckroth.html">Charles Heckroth</a>
+    </address>
+    <div class="category">
+        Category: <a href="/category/blog.html">blog</a>
+    </div>
+    <div class="tags">
+        Tags:
+            <a href="/tag/github.html">github</a>
+            <a href="/tag/opensource.html">opensource</a>
+            <a href="/tag/communication.html">communication</a>
+    </div>
+  </footer><!-- /.post-info -->
+  <div class="entry-content">
+    <p>*This blog entry is a work-in-progreses</p>
+<p>I recently saw <a href="https://twitter.com/travisbrown/status/1165502986661105664">a tweet that showcased extremely poor communication</a> in a feature request for an open-source repository. It got me thinking: Sure this person could just be entitled and abrasive, but its more likely he just doesn't know how to communicate well to strangers on github.</p>
+<p>I want to break down how I communicate with project maintainers on Github (or whatever version contorl platform you use).</p>
+<h1>Basic Guidelines</h1>
+<ul>
+<li>Follow the rules for the project or community you want to interract with</li>
+<li>If a project has rules or an issue template, follow it.</li>
+<li>Don't assume the maintainers will implement your request</li>
+<li>A lot of projects are dead. Other projects are low priority for maintainers. There's nothing you can do about that.</li>
+<li>Give as much relavent information as you possibly can</li>
+<li>Outline the problem in detail. Don't make somebody else figure out the problem, because they won't.</li>
+<li>Don't harass anybody</li>
+<li>I can't believe how many people think Github is an appropriate place to tell people how they are supposed to think. It's not.</li>
+<li>Don't be selfish</li>
+<li>Do some of the legwork yourself.</li>
+<li>Be friendly, but professional</li>
+<li>A Please and a Thank You are nice, but keep in mind that you're on a professional and public forum.</li>
+</ul>
+<h1>The test case</h1>
+<p>Let's take the tweet I linked above as a test case. My examples will assume that:</p>
+<p>I want the maintainer of a Scala project to publish for a newer version of the language because it is a dependency of another library that uses that version.</p>
+<p>What's wrong with the example ticket titled "Publish for Scala 2.13.x please"?</p>
+<p>There is basically no information in this ticket other than that the library in question is a dependency to another library.</p>
+<p>The title is not in a professional format -- it's a flat imperative request. The author assumes absolutely no responsibility for the request, assuming that asking for it will just be magically done.</p>
+<p>The ticket is selfish. The maintainer doesn't care what other libraries that depend on their own do. There's only one dependent listed in the ticket body which really implies that the dependent library should do something about it, not the dependee.</p>
+<h1>Opening an Issue</h1>
+<p>An Issue on Github is how you track the conversation. This is where you make feature requests, report bugs, or inquire about the state of the project. You can open an issue on any repository on github, and this is where you start the conversation.</p>
+<p>Many github projects define an issue template with rules and guidelines for how to write a detailed issue. In these cases, you should always follow the template as much as humanly possible. Don't stray from templates, they exist for a reason.</p>
+<p>If there isn't an issue template, you should by default include basic necessary information, cleanly formatted.</p>
+<ul>
+<li>The request: "Publish Project for Scala 2.13"</li>
+<li>The reason: "Supporting newer versions of scala allowing newer projects to depend on this library"</li>
+<li>What you've done yourself: Outline what you've actually tried on your own to prove that your first response to an error wasn't to open an issue on Github.</li>
+<li>An example of the reason: "Running a project on Scala 2.13 with Eff will throw <error details>, caused by this project"</li>
+<li>Extra examples if possible: Chances are you aren't the only one with the issue. Find another example to show that you aren't the only one struggling.</li>
+</ul>
+<h1>Opening a Pull Request</h1>
+<p>If possible, you should fork the repository you are opening a ticket to and try to fix the problem yourself. Add a link to your pull request in the ticket. The best way to get a feature implemented in an open source project is to do it yourself.</p>
+<p>If you can't fix the code yourself, that's OK. Some issues are complex and outside of your area of expertise. In this case, explain that in the Issue you opened. Let them know that you tried (and what you did), but that you aren't likely to be able to solve it yourself.</p>
+<p>If you couldn't fix the issue, you can probably still reproduce the issue. Create a pull request that adds a failing test to the project that shows whatever you're talking about in detail and makes it possible to ensure that if a fix is implemented, it solves the problem.</p>
+<h1>Deailing with a dead or low priority project</h1>
+<p>Some projects aren't very active. Some projects were made by people who aren't around anymore. Maybe they changed careers, or went to prison, or passed away. Or maybe they just don't care about that project enough to work on it anymore.</p>
+<h2>Contacting the maintainer</h2>
+<p>WARNING: Do not contact maintainers who state they do not want to be contacted. As a general rule, only contact them if they have contact info listed <em>on github</em>.</p>
+<p>You can contact the maintainer of a dead project directly. Give them a nudge to look at your ticket (especially if you've already implemented the fix &amp; opened a PR). If they have no interest in maintaining the project, see if they are willing to transfer ownership of the project to you!</p>
+<p>If you do contact them, make sure you've given a reasonable amount of time for them to respond first. DO NOT tweet at a developer as soon as you open a pull request. Wait a week or two before resorting to personal contact. This sort of action can very easily slide over the line in to harrassment. Do not contact them more than once.</p>
+<p>I've had success in the past getting pull requests merge by pinging the developer on Twitter. Sometimes they're just not looking. Maybe they're on vacation or something. A notification on a platform they're more actively using is often enough of a push.</p>
+<h2>Forking the project</h2>
+<p>Forking projects is necessary to make a pull request to an open sorce project.</p>
+<p>However, if a repository is completely dead with no hope of transfer of ownership, you want to "fork" the repository in to a new project where <em>you</em> are the maintainer.</p>
+<p>The standard Fork functionality on github won't do the trick -- this makes your project hidden behind the main, dead repository.</p>
+<p>If you want to take ownership of a completely dead project, you need to:</p>
+<ul>
+<li>Keep the same license</li>
+<li>Change the name</li>
+<li>Make it clear that its a fork/copy of the dead repository, and give credit</li>
+<li>"ThisProject is a library for some feature, forked from OtherProject, a module by SomePerson"</li>
+</ul>
+<p>There aren't really "rules" about copying entire projects so you can be the maintainer, but its generally accepted if a project is truly dead as long as you give proper credit.</p>
+  </div><!-- /.entry-content -->
+</section>
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
+                which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+        </footer><!-- /#contentinfo -->
+</body>
+</html>
