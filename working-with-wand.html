@@ -1,56 +1,154 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-          <title>checkroth-site - Working with ImageMagick's Wand Python Library</title>
-        <meta charset="utf-8" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="/theme/pygments/colorful.min.css">
+  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/solid.css">
+
+    <link href="/static/custom.css" rel="stylesheet">
 
 
 
 
-    <meta name="tags" content="python" />
-    <meta name="tags" content="python-wand" />
-    <meta name="tags" content="pdf" />
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+  ga('create', 'UA-136401999-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#FFFFFF">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#FFFFFF">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Microsoft EDGE -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+
+<meta name="author" content="Charles Heckroth" />
+<meta name="description" content="Handling Wand Resolutions, Units, and Image Types" />
+<meta name="keywords" content="python, python-wand, pdf">
+
+<meta property="og:site_name" content="checkroth-site"/>
+<meta property="og:title" content="Working with ImageMagick&#39;s Wand Python Library"/>
+<meta property="og:description" content="Handling Wand Resolutions, Units, and Image Types"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="/working-with-wand.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2019-03-19 00:00:00+09:00"/>
+<meta property="article:modified_time" content=""/>
+<meta property="article:author" content="/author/charles-heckroth.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="python-wand"/>
+<meta property="article:tag" content="pdf"/>
+<meta property="og:image" content="/images/me.jpg">
+
+  <title>checkroth-site &ndash; Working with ImageMagick&#39;s Wand Python Library</title>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-3090577057275093",
+      enable_page_level_ads: true
+    });
+  </script>
 </head>
+<body>
+  <aside>
+    <div>
+      <a href="">
+        <img src="/images/me.jpg" alt="Charles Henry Heckroth" title="Charles Henry Heckroth">
+      </a>
+      <h1><a href="">Charles Henry Heckroth</a></h1>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="/">checkroth-site <strong>My Notes & Blog</strong></a></h1>
-        </header><!-- /#banner -->
-        <nav id="menu"><ul>
-            <li><a href="/blog_index.html">Blog</a></li>
-            <li><a href="/archives.html">Archives</a></li>
-            <li><a href="/categories.html">Categories</a></li>
-            <li><a href="/tags.html">Tags</a></li>
-            <li><a href="/">About Me</a></li>
-            <li class="active"><a href="/category/blog.html">blog</a></li>
-            <li><a href="/category/software-blog.html">software blog</a></li>
-        </ul></nav><!-- /#menu -->
-<section id="content" class="body">
+<p>My Notes & Blog</p>
+      <nav>
+        <ul class="list">
+          <li><a href="/#about-me">About Me</a></li>
+
+          <li><a href="/blog_index.html" target="_blank">Blog</a></li>
+          <li><a href="https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view" target="_blank">Resume</a></li>
+          <li><a href="https://www.beproud.jp" target="_blank">BeProud</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+          <li>
+            <a  class="sc-envelope" href="mailto:checkroth@gmail.com" target="_blank">
+            <i class="fas fa-envelope">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-github" href="https://www.github.com/Checkroth" target="_blank">
+            <i class="fab fa-github">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-linkedin" href="https://www.linkedin.com/in/charlesheckroth" target="_blank">
+            <i class="fab fa-linkedin">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-twitter" href="http://www.twitter.com/checkroth" target="_blank">
+            <i class="fab fa-twitter">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-stack-overflow" href="https://stackoverflow.com/users/1037971/charles" target="_blank">
+            <i class="fab fa-stack-overflow">
+            </i>
+          </a></li>
+      </ul>
+    </div>
+
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="">    Home
+</a>
+
+      <a href="/blog_index.html">Blog</a>
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
   <header>
-    <h2 class="entry-title">
-      <a href="/working-with-wand.html" rel="bookmark"
-         title="Permalink to Working with ImageMagick's Wand Python Library">Working with ImageMagick's Wand Python Library</a></h2>
- 
+      
+    <h1 id="working-with-wand">Working with ImageMagick's Wand Python Library</h1>
+    <p>
+          Posted on March 19, 2019 in <a href="/category/blog.html">blog</a>
+
+
+    </p>
   </header>
-  <footer class="post-info">
-    <time class="published" datetime="2019-03-19T00:00:00+09:00">
-      March 19, 2019
-    </time>
-    <address class="vcard author">
-      By           <a class="url fn" href="/author/charles-heckroth.html">Charles Heckroth</a>
-    </address>
-    <div class="category">
-        Category: <a href="/category/blog.html">blog</a>
-    </div>
-    <div class="tags">
-        Tags:
-            <a href="/tag/python.html">python</a>
-            <a href="/tag/python-wand.html">python-wand</a>
-            <a href="/tag/pdf.html">pdf</a>
-    </div>
-  </footer><!-- /.post-info -->
-  <div class="entry-content">
+
+
+  <div>
     <p>Handling images in wand can be deviously tricky, especially when you need a common system-wide resolution.</p>
 <p>An example use-case:</p>
 <p>I work on a system that sends &amp; receives faxes. It also handles email attachments and draws text on to fixed format images (inquiries, order details, etc.).</p>
@@ -199,13 +297,68 @@
 <p>I generally scale positions and sizes with <code>math.floor(value * (SYSTEM_RESOLUTION / IMPLEMENTATION_RESOLUTION))</code>, where <code>SYSTEM_RESOLUTION</code> is the resolution you want, <code>IMPLEMENTATION_RESOLUTION</code> is whatever resolution you assumed when writing the code, and <code>value</code> is the value you want to scale.</p>
 <p>3: Making an new image: I generally call this a <code>canvas</code>, and its important to specify the background color if you're going to be creating some sort of business document with the <code>background</code> parameter to the <code>Image</code> constructor.</p>
 <p>4: Wand uses ImageMagick to process everything, so outside of the wand version (I'm using <code>0.4.4</code>), your operating system and ImageMagick version could also make things work differently.</p>
-  </div><!-- /.entry-content -->
-</section>
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-        </footer><!-- /#contentinfo -->
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="/tag/python.html">python</a>
+      <a href="/tag/python-wand.html">python-wand</a>
+      <a href="/tag/pdf.html">pdf</a>
+    </p>
+  </div>
+
+
+
+
+
+<!-- Disqus -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'checkroth';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+        Please enable JavaScript to view comments.
+
+</noscript>
+<!-- End Disqus -->
+</article>
+
+    <footer>
+<p>
+  &copy;  2019 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " checkroth-site ",
+  "url" : "",
+  "image": "/images/me.jpg",
+  "description": "My Blog"
+}
+</script>
+
 </body>
 </html>
