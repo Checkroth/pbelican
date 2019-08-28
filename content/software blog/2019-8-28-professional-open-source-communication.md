@@ -15,17 +15,17 @@ I want to break down how I communicate with project maintainers on Github (or wh
 # Basic Guidelines
 
 - Follow the rules for the project or community you want to interract with
-  - If a project has rules or an issue template, follow it.
+    - If a project has rules or an issue template, follow it.
 - Don't assume the maintainers will implement your request
-  - A lot of projects are dead. Other projects are low priority for maintainers. There's nothing you can do about that.
+    - A lot of projects are dead. Other projects are low priority for maintainers. There's nothing you can do about that.
 - Give as much relavent information as you possibly can
-  - Outline the problem in detail. Don't make somebody else figure out the problem, because they won't.
+    - Outline the problem in detail. Don't make somebody else figure out the problem, because they won't.
 - Don't harass anybody
-  - I can't believe how many people think Github is an appropriate place to tell people how they are supposed to think. It's not.
+    - I can't believe how many people think Github is an appropriate place to tell people how they are supposed to think. It's not.
 - Don't be selfish
-  - Do some of the legwork yourself.
+    - Do some of the legwork yourself.
 - Be friendly, but professional
-  - A Please and a Thank You are nice, but keep in mind that you're on a professional and public forum.
+    - A Please and a Thank You are nice, but keep in mind that you're on a professional and public forum.
 
 # The test case
 
@@ -90,6 +90,6 @@ If you want to take ownership of a completely dead project, you need to:
 - Keep the same license
 - Change the name
 - Make it clear that its a fork/copy of the dead repository, and give credit
-  - "ThisProject is a library for some feature, forked from OtherProject, a module by SomePerson"
+    - "ThisProject is a library for some feature, forked from OtherProject, a module by SomePerson"
 
 There aren't really "rules" about copying entire projects so you can be the maintainer, but its generally accepted if a project is truly dead as long as you give proper credit.
