@@ -90,5 +90,7 @@ GOOGLE_ADSENSE = {
     'ca_id': 'ca-pub-3090577057275093',
     'page_level_ads': True,
     'ads': {
+        'aside': '7734708573',
+        'article_bottom': '6895080254',
     }
 }
