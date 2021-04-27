@@ -5,6 +5,7 @@ Tags: linux, ubuntuserver, selfhosting, plex, grafana, prometheus
 Slug: self-hosted-server
 Authors: Charles Heckroth
 Summary: Introductory steps to getting an ubuntu server running in your home.
+Status: Draft
 
 This post is mostly meant as a reminder to myself in case I'm in a position where I have to set it all up again.
 
