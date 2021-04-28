@@ -1,5 +1,6 @@
 Title: Setting up a Self-Hosted Server
-Date: 2021-04-27
+Date: 2021-04-28
+Modified: 2021-04-28
 Category: blog
 Tags: linux, ubuntuserver, selfhosting, plex, grafana, prometheus
 Slug: self-hosted-server
@@ -63,7 +64,27 @@ where ESSID is the name of your wifi network. This is the name of the network wh
 - install network-manager with `apt install network-manager`
 - run `nmcli dev wifi`
 
-Finally, if your network is unbroadcasted, add `scan_ssid=1` to the bottom of the network object you just created in `etc/wpa_supplicant.conf`.
+If your network is unbroadcasted, add `scan_ssid=1` to the bottom of the network object you just created in `etc/wpa_supplicant.conf`.
+
+If you want to go _only_ on WiFi, you may want to mark ethernet is optional in `/etc/netplan/00-installer-config.yaml`
+
+My config looks like the following:
+
+```
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    enp8s0:
+      optional: true
+      dhcp4: true
+  version: 2
+  wifis:
+    wlp6s0:
+      access-points:
+        "mywifiESSID":
+          password: "mywifipassword"
+      dhcp4: true
+```
 
 ## Finding your IPv4
 
@@ -126,22 +147,328 @@ Details for how to set up my most heavily used software packages for the new ser
 
 Download [plexmediaserver](https://www.plex.tv/media-server-downloads/).
 
-You can either copy the link that this page takes you to, and paste it over in your server with `wget copiedlink`, or you can just scp. If you Did the 「Going Remote」 section above, it should be as simple as:
+You can either copy the link that this page takes you to, and paste it over in your server with `wget copiedlink`, or you can just scp. If you did the 「Going Remote」 section above, it should be as simple as:
 
 - Download the latest version of plexmediaserver, something like `plexmediaserver_1.22.3.4392-d7c624def_amd64.deb`
 - Copy the file to your server with `scp plexmediaserver_1.22.3.4392-d7c624def_amd64.deb dopeserver:`
 
+Then you just install with dpkg on the server, `sudo dpkg -i plexmediaserver_1.22.3.4392-d7c624def_amd64.deb`.
 
+You should be able to see plex running with `systemctl status plexmediaserver`, and you should be able to see it from your main computer using the private network IP address on port 32400, ` http://192.168.1.123:32400/`
 
 ## Metrics
 
+For all parts below, keep the following in mind:
+
+- For downloading you can use `wget` or you can download via browser and SCP as outlined under Plex.
+- All the filenames/dates I'm using are of the current version at-time-of-writing. They may be different, please check the linked release pages.
+- I am using the `/opt` directory just because I prefer it, as it helps be keep track of which services I am manually managing. Most guides will tell you to use `/etc` and that's fine too.
+- I create a user for each service. This isn't strictly necessary.
+
+### Node Exporter
+
+Note: There are lots of other exporters. I recommend adding whatever piques your interest.
+
+[Download node_exporter](https://prometheus.io/download/#node_exporter)
+
+```
+# Download, extract, move
+wget https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-amd64.tar.gz
+tar -xzvf node_exporter-1.1.2.linux-amd64.tar.gz
+sudo mv node_exporter-1.1.2.linux-amd64/node_exporter /opt/
+
+# Set permissions
+sudo useradd --no-create-home --shell /bin/false node_exporter
+sudo chown node_exporter:node_exporter /opt/node_exporter
+```
+
+Next you want to make a systemd service for node exporter
+
+Place the following in a new file: /etc/systemd/system/node_exporter.service
+
+```
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/opt/node_exporter --collector.systemd
+
+[Install]
+WantedBy=multi-user.target
+```
+
+And then run it:
+
+```
+sudo systemctl enable node_exporter
+sudo systemctl start node_exporter
+```
+
+You should now see node exporter on your local network ip at port 9100, `http://192.168.1.123:9100/`
+
+### Prometheus
+
+[Download prometheus](https://prometheus.io/download/)
+
+```
+# Download, extract, move
+wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
+tar -xzvf node_exporter-1.1.2.linux-amd64.tar.gz
+# This is renaming the folder, not putting the prometheus-2.26.0.linux-amd64 folder as a subfolder under /opt/prometheus/prometheus-2.26.0.linux-amd64.
+sudo mv prometheus-2.26.0.linux-amd64 /opt/prometheus
+
+# Set permissions
+sudo useradd --no-create-home --shell /bin/false prometheus
+sudo chown prometheus:prometheus /opt/prometheus
+```
+
+You really only need the `prometheus` and `prometheus.yml` files. But you can just move everything, its not that much.
+
+Next you want to edit the yaml file you copied to include any targets you have added. I'll be including node exporter from the last step, as well as node exporter that I already have running on my main machine.
+
+The main portion of this file is exactly what was in `prometheus.yml`, I have just added two scrape configs at the bottom.
+
+```yaml
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: ['localhost:9090']
+
+  # These are the bits you add
+  - job_name: 'dopeserver'
+    static_configs:
+    - targets: ['localhost:9100']
+  - job_name: dopepersonalpc
+    static_configs:
+    - targets: ['192.168.1.124:9100']
+```
+
+Finally, you need a systemd service for this one too.
+
+This goes in `/etc/systemd/system/prometheus.service`
+
+```
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+WorkingDirectory=/opt
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/opt/prometheus \
+    --config.file /opt/prometheus.yml
+
+[Install]
+WantedBy=multi-user.target
+```
+
+And, enable & start
+
+```
+sudo systemctl enable prometheus
+sudo syetemctl start prometheus
+```
+
+You should now see node exporter on your local network ip at port 9090, `http://192.168.1.123:9090/`
+
+### Grafana
+
+You can install grafana enterprise. Its the same as the free version with the paywalled features in the package, but you can just leave those behind the paywall.
+
+Following the Grafana installation guide:
+
+```
+echo "deb https://packages.grafana.com/enterprise/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
+sudo apt update
+sudo apt install grafana-enterprise
+```
+
+There may be a plugin there (it is for me, sometimes) that breaks grafana. You want to remove it (or move it to a persisted trash, just in case)
+
+```
+sudo mv /usr/share/grafana/plugins-bundled/gel-0.6.0/ ~/trash/
+```
+
+And enable & start
+
+```
+sudo systemctl enable grafana-server
+sudo systemctl start grafana-server
+```
+
+You should now see node exporter on your local network ip at port 3000, `http://192.168.1.123:3000/`
+
+You may want to set the password or reconfigure. The configuraiton lives in `/etc/grafana/grafana.ini`.
+
+[//]: TODO:: Add a link to the grafana-behind-reverse-proxy blog
+You can change things like the port, admin_password, or setup SSL or a custom domain here. More details in a future post.
+
+Now that you have grafana, prometheus, and node_exporter running, you'll want to set up your first dashboard.
+
+In grafana, 
+- add a data source for your local prometheus (you don't need the private network IP, just `0.0.0.0:9090`)
+- Go to +(Create) -> Import -> Pop the Node Exporter Full dashboard in there: https://grafana.com/grafana/dashboards/1860
+
+Now you should have real-time metrics for your server!
+
 ## Logging
+
+### Promtail
+
+Promtail is necessary to get your logs in to Loki and Grafana.
+
+[Download promtail](https://github.com/grafana/loki/releases)
+
+```
+wget https://github.com/grafana/loki/releases/download/v2.2.1/promtail-linux-amd64.zip
+7z x promtail-linux-amd64.zip
+sudo mv promtail-linux-amd64 /opt/promtail
+```
+
+Promtail default configuration is kind of hard to come by. Mine looks like this, at /opt/promtail.yml:
+
+```
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://127.0.0.1:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: plex
+    static_configs:
+      - targets:
+        - localhost
+        labels:
+          job: plex
+          __path__: /var/lib/plexmediaserver/Library/Application\ Support/Plex\ Media\ Server/Logs/*log
+  - job_name: nginx
+    pipeline_stages:
+      - replace:
+          expression: '(?:[0-9]{1,3}\.){3}([0-9]{1,3})'
+          replace: '***'
+    static_configs:
+      - targets:
+         - localhost
+        labels:
+          job: nginx_access_log
+          host: canvas
+          agent: promtail
+          __path__: /var/log/nginx/*access.log
+```
+
+Note that my nginx access logs are set up to be compatible with [this dashboard](https://grafana.com/grafana/dashboards/12559)
+
+And you need a service. This one doesn't have its own user group because it needs access to system logs.
+
+The following would go in `/etc/systemd/system/promtail.service`
+
+```
+[Unit]
+Description=Promtail
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/opt/promtail -config.file /opt/promtail.yml
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### Loki
+
+Grafana Loki is a nice way to get your logs from journalctl and plex in to Grafana, so you can play around with those. It will also be useful when you want to do more with your server in the future, like run a website or some application.
+
+Following the grafana loki installation guide found [here](https://grafana.com/docs/loki/latest/installation/local/)
+
+```
+# Get and extract loki
+curl -O -L "https://github.com/grafana/loki/releases/download/v2.2.1/loki-linux-amd64.zip"
+unzip loki-linux-amd64.zip
+sudo mv loki-linux-amd64 /opt/loki
+
+# Get basic config
+wget https://raw.githubusercontent.com/grafana/loki/master/cmd/loki/loki-local-config.yaml
+sudo mv loki-local-config.yaml /opt/loki.yaml
+
+# Set permissions
+sudo chown prometheus:prometheus /opt/prometheus.yml
+sudo chown prometheus:prometheus /opt/prometheus
+```
+
+I just use the default loki config with no changes.
+
+Next, you need to add the service. I just share prometheus permissions with this one.
+
+```
+[Unit]
+Description=Loki
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/opt/loki -config.file /opt/loki.yml
+
+[Install]
+WantedBy=multi-user.target
+```
 
 ## Other uses
 
+There are a lot of things you can use a private server for. Some of the things I use it in addition to plex and general metrics are:
+
+- Hosting a static site (where you're reading this)
+- Running [steamCMD](https://developer.valvesoftware.com/wiki/SteamCMD) to run dedicated servers, like a [Valheim Server](https://www.shacknews.com/article/122720/how-to-set-up-a-valheim-dedicated-server).
+- Running custom applications like a slack or discord bot
+- Exposing local network devices on specific ports without messing with the router
+
 # Related Pages
+
+[//]: TODO:: Link to actual blog posts
 
 - Pointing a domain to your self-hosted server
 - Monitoring Everything In Your Home With Grafana/Prometheus
 - Nginx and subpath proxy passes
-- Exposing your development server through your locally hosted server
+- Exposing a development server through your locally hosted server
