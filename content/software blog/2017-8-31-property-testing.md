@@ -1,9 +1,10 @@
 Title: Property Testing: Why You Should Generate Test Data
 Date: 2017-08-31
+Category: blog
 Tags: testing, property testing, python
 Slug: property-testing
 Authors: Charles Heckroth
-Summary: My thoughts on the benefits of property testing
+<!-- Summary: My thoughts on the benefits of property testing -->
 
 This post is cross-posted to [dev.to](https://dev.to/checkroth/property-testing-why-you-should-generate-test-data)
 

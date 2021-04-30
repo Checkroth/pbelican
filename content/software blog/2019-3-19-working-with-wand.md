@@ -4,7 +4,7 @@ Category: blog
 Tags: python, python-wand, pdf
 Slug: working-with-wand
 Authors: Charles Heckroth
-Summary: Handling Wand Resolutions, Units, and Image Types
+<!-- Summary: Handling Wand Resolutions, Units, and Image Types -->
 
 Handling images in wand can be deviously tricky, especially when you need a common system-wide resolution.
 

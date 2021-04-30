@@ -4,7 +4,7 @@ Category: blog
 Tags: python, django, filestorage
 Slug: easy-thumbnails-from-path
 Authors: Charles Heckroth
-Summary: Forcing easy_thumbnails to calculate a URL without a direct object reference
+<!-- Summary: Forcing easy_thumbnails to calculate a URL without a direct object reference -->
 Status: Draft
 
 # The Problem

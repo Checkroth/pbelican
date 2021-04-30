@@ -4,7 +4,6 @@ Category: blog
 Tags: gcp, python
 Slug: google-datastore
 Authors: Charles Heckroth
-Summary: Notes from working with google datastore
 Status: Draft
 
 I recently worked on a project in Google Cloud Platform using the following:

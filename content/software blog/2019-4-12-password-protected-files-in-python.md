@@ -4,7 +4,7 @@ Category: blog
 Tags: python, pdf, msoffcrypto-tool, pikepdf
 Slug: unlocking-password-protected-files
 Authors: Charles Heckroth
-Summary: Stripping passwords from files in Python
+<!-- Summary: Stripping passwords from files in Python -->
 
 When working on a system that processes files, you're likely to run in to password protected files. Particularly in Japan, password-protected pdfs, office files, and zip files are the norm.
 

@@ -4,7 +4,7 @@ Category: blog
 Tags: github, opensource, communication
 Slug: prof-os-communication
 Authors: Charles Heckroth
-Summary: Communicating politely and effictively with open source maintainers
+<!-- Summary: Communicating politely and effictively with open source maintainers -->
 
 *This blog entry is a work-in-progreses
 
