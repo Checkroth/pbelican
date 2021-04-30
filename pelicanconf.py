@@ -3,9 +3,9 @@
 from __future__ import unicode_literals
 
 AUTHOR = 'charles'
-SITENAME = 'checkroth-site'
+SITENAME = 'software-and-stuff'
 SITEURL = ''
-SITEDESCRIPTION = 'My Blog'
+SITEDESCRIPTION = 'Blog and info'
 SITETITLE = 'Charles Henry Heckroth'
 SITESUBTITLE = 'My Notes & Blog'
 # SITELOGO = 'https://avatars3.githubusercontent.com/u/1385951?s=460&v=4'e
@@ -56,7 +56,7 @@ SOCIAL = (('envelope', 'mailto:checkroth@gmail.com'),
 
 # Local site links
 HOME_HIDE_TAGS = False
-INDEX_SAVE_AS = 'blog_index.html'
+# INDEX_SAVE_AS = 'blog_index.html'
 MAIN_MENU = True
 MENUITEMS = (('Blog', '/blog_index.html'),
              ('Archives', '/archives.html'),
