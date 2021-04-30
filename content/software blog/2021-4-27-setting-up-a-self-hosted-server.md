@@ -1,12 +1,11 @@
 Title: Setting up a Self-Hosted Server
-Date: 2021-04-28
-Modified: 2021-04-28
+Date: 2021-04-30
+Modified: 2021-04-30
 Category: blog
 Tags: linux, ubuntuserver, selfhosting, plex, grafana, prometheus
 Slug: self-hosted-server
 Authors: Charles Heckroth
 Summary: Introductory steps to getting an ubuntu server running in your home.
-Status: Draft
 
 This post is mostly meant as a reminder to myself in case I'm in a position where I have to set it all up again.
 
@@ -109,7 +108,7 @@ Just hit `curl https://ipinfo.io/ip` to get your public IP.
 
 If you're anything like me, the first thing you'll want to do once your server is running is... stop interacting with your server directly.
 
-Your new ubuntu server should already be ssh-ready. Simply ensure that you are on the same local network as your server and then ssh to its private network IP address.
+Your new ubuntu server should already be ssh-ready. Simply ensure that you are on the same local network as your server and then ssh to its private network IP address, or use the public IP if you aren't on the same network as the server.
 
 You need the username you created when spinning up your server.
 
@@ -455,20 +454,11 @@ ExecStart=/opt/loki -config.file /opt/loki.yml
 WantedBy=multi-user.target
 ```
 
-## Other uses
+## Related Pages
 
-There are a lot of things you can use a private server for. Some of the things I use it in addition to plex and general metrics are:
+I will come back and link to these when I write them.
 
-- Hosting a static site (where you're reading this)
-- Running [steamCMD](https://developer.valvesoftware.com/wiki/SteamCMD) to run dedicated servers, like a [Valheim Server](https://www.shacknews.com/article/122720/how-to-set-up-a-valheim-dedicated-server).
-- Running custom applications like a slack or discord bot
-- Exposing local network devices on specific ports without messing with the router
-
-# Related Pages
-
-[//]: TODO:: Link to actual blog posts
-
-- Pointing a domain to your self-hosted server
+- Hosting a static site / Pointing a domain to your self-hosted server
 - Monitoring Everything In Your Home With Grafana/Prometheus
 - Nginx and subpath proxy passes
 - Exposing a development server through your locally hosted server
