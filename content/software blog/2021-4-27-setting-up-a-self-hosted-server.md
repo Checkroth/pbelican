@@ -67,7 +67,7 @@ where ESSID is the name of your wifi network. This is the name of the network wh
 
 If your network is unbroadcasted, add `scan_ssid=1` to the bottom of the network object you just created in `etc/wpa_supplicant.conf`.
 
-If you want to go _only_ on WiFi, you may want to mark ethernet is optional in `/etc/netplan/00-installer-config.yaml`
+If you want to go _only_ on WiFi, you may want to mark ethernet as optional in `/etc/netplan/00-installer-config.yaml`. If you don't do this, your server start will slow down significantly while it waits the default amount of time for your network to connect (probably around 90 seocnds).
 
 My config looks like the following:
 
@@ -455,6 +455,27 @@ ExecStart=/opt/loki -config.file /opt/loki.yml
 [Install]
 WantedBy=multi-user.target
 ```
+
+# In Summary
+
+This guide is meant mostly as a self-refernce, but I hope it is helpful to anybody trying to start their own local server.
+
+The general software I use on my server are:
+
+- Grafana
+- Promtail
+- Loki
+- Prometheus
+- Node Exporter
+- Plex
+- Nginx
+- steamcmd
+- wpa_supplicant (wpa_passphrase)
+- network_manager (nmcli)
+
+Everything should be running via systemd with their logs accessible through journalctl or grafana (if you use loki).
+
+I will write some other entries exploring more in-depth use of this software, this post is just about the initial setup.
 
 ## Related Pages
 

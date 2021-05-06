@@ -4,11 +4,11 @@ from __future__ import unicode_literals
 
 AUTHOR = 'charles'
 SITENAME = 'software-and-stuff'
+SITEURL = 'https://checkroth.com'
 SITEURL = ''
 SITEDESCRIPTION = 'Blog and info'
 SITETITLE = 'Charles Henry Heckroth'
 SITESUBTITLE = 'My Notes & Blog'
-# SITELOGO = 'https://avatars3.githubusercontent.com/u/1385951?s=460&v=4'e
 SITELOGO = '/images/me.jpg'
 FAVICON = ''
 BROWSER_COLOR = '#FFFFFF'
@@ -17,6 +17,9 @@ PATH = 'content'
 PYGMENTS_STYLE = 'colorful'
 
 TIMEZONE = 'Japan'
+
+PLUGIN_PATHS = ['plugins']
+PLUGINS = ['pelican-toc']
 
 
 I18N_TEMPLATES_LANG = 'en'
@@ -38,12 +41,10 @@ AUTHOR_FEED_RSS = None
 USE_FOLDER_AS_CATEGORY = True
 
 # Blogroll
-LINKS = (('Blog', '/blog_index.html'),
-         ('Resume',
-          'https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view'),
-         ('BeProud', 'https://www.beproud.jp'),
-         )
-
+LINKS = (
+    ('Blog', '/'),
+    ('Resume', 'https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view'),
+)
 
 # Social widget
 SOCIAL = (('envelope', 'mailto:checkroth@gmail.com'),
@@ -52,13 +53,13 @@ SOCIAL = (('envelope', 'mailto:checkroth@gmail.com'),
           ('twitter', 'http://www.twitter.com/checkroth'),
           ('stack-overflow', 'https://stackoverflow.com/users/1037971/charles'),
           )
+TWITTER_USERNAME = '@checkroth'
 
 
 # Local site links
 HOME_HIDE_TAGS = False
-# INDEX_SAVE_AS = 'blog_index.html'
 MAIN_MENU = True
-MENUITEMS = (('Blog', '/blog_index.html'),
+MENUITEMS = (('Blog', '/'),
              ('Archives', '/archives.html'),
              ('Categories', '/categories.html'),
              ('Tags', '/tags.html'),)
@@ -93,4 +94,14 @@ GOOGLE_ADSENSE = {
         'aside': '7734708573',
         'article_bottom': '6895080254',
     }
+}
+
+MARKDOWN = {
+    'extension_configs': {
+        'markdown.extensions.codehilite': {'css_class': 'highlight'},
+        'markdown.extensions.extra': {},
+        'markdown.extensions.meta': {},
+        'markdown.extensions.toc': {},
+    },
+    'output_format': 'html5',
 }
