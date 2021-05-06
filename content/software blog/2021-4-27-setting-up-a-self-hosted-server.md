@@ -11,9 +11,9 @@ This post is mostly meant as a reminder to myself in case I'm in a position wher
 
 Setting up a new server from scratch can be particularly annoying when you have to remember all of the minor configuration steps you figured out by trial-and-error. This is a record of some of those steps to make it easier for myself in the future, and for anybody else who might be interested.
 
-# Requirements and Outline
+# [Requirements and Outline](#requirements-and-outline)
 
-## Tools used
+## [Tools used](#tools-used)
 
 1) A computer
 
@@ -27,7 +27,7 @@ But you could really use anything.
 
 2.b The other should have a [live usb](https://ubuntu.com/tutorials/create-a-usb-stick-on-ubuntu#1-overview). This is generally useful if you run in to trouble at any point.
 
-## Overall Process
+## [Overall Process](#overall-process)
 
 The simple steps overview is:
 
@@ -37,9 +37,9 @@ The simple steps overview is:
 4. Set up networking
 5. Set up desired software (plex, grafana, etc.)
 
-# System Setup
+# [System Setup](#system-setup)
 
-## Preparation
+## [Preparation](#preparation)
 
 My goal was primarily to have a plex server to serve my music and video collection that's been bouncing between various storage and streaming services for the past ten years.
 
@@ -47,12 +47,12 @@ As such, my server required a lot of space, but I wanted to keep the operating s
 
 I recommend doing something similar to this if you have a lot of storage space, as eventually you will want to [move your operating system](https://askubuntu.com/a/741727/509039), and having just the essentials during that process makes things a lot easier. 
 
-## Installation
+## [Installation](#installation)
 
 Make sure you have an ethernet connection before starting, even if you ultimately want to use Wi-Fi
 Straightforward. Boot from the ubuntu server install usb and follow the interactive steps.
 
-## Networking
+## [Networking](#networking)
 
 In case you have a wifi card on your server, the following must be done
 
@@ -87,9 +87,9 @@ network:
       dhcp4: true
 ```
 
-## Finding your IPv4
+## [Finding your IPv4](#finding-your-ipv4)
 
-### private
+### [private](#private)
 
 run `ifconfig`.
 
@@ -98,7 +98,7 @@ Ignore entires like `127.0.0.1`
 Your private network IP address should be something like `192.168.1.123`.
 
 
-### public
+### [public](#public)
 
 Your public IP address will be necessary for a lot of things, most notable the following "Going Remote" step.
 
@@ -106,7 +106,7 @@ It can be surprisingly difficult to find your outgoing IPV4 address through cli 
 
 Just hit `curl https://ipinfo.io/ip` to get your public IP.
 
-## Going Remote
+## [Going Remote](#going-remote)
 
 If you're anything like me, the first thing you'll want to do once your server is running is... stop interacting with your server directly.
 
@@ -126,7 +126,7 @@ ssh-copy-id  myserveradmin@192.168.1.123
 
 And now you should be able to access your server over SSH from your local network without a password!
 
-### Making it even easier
+### [Making it even easier](#making-it-even-easier)
 
 If you gave a name to your new server as many nerds are want to do, you might want to be able to communicate with it with just that name!
 
@@ -140,11 +140,11 @@ Host dopeserver
 
 Now you can get in with just `ssh dopeserver`
 
-# Software
+# [Software](#software)
 
 Details for how to set up my most heavily used software packages for the new server.
 
-## Plex
+## [Plex](#plex)
 
 Download [plexmediaserver](https://www.plex.tv/media-server-downloads/).
 
@@ -157,7 +157,7 @@ Then you just install with dpkg on the server, `sudo dpkg -i plexmediaserver_1.2
 
 You should be able to see plex running with `systemctl status plexmediaserver`, and you should be able to see it from your main computer using the private network IP address on port 32400, ` http://192.168.1.123:32400/`
 
-## Metrics
+## [Metrics](#metrics)
 
 For all parts below, keep the following in mind:
 
@@ -166,7 +166,7 @@ For all parts below, keep the following in mind:
 - I am using the `/opt` directory just because I prefer it, as it helps be keep track of which services I am manually managing. Most guides will tell you to use `/etc` and that's fine too.
 - I create a user for each service. This isn't strictly necessary.
 
-### Node Exporter
+### [Node Exporter](#node-exporter)
 
 Note: There are lots of other exporters. I recommend adding whatever piques your interest.
 
@@ -212,7 +212,7 @@ sudo systemctl start node_exporter
 
 You should now see node exporter on your local network ip at port 9100, `http://192.168.1.123:9100/`
 
-### Prometheus
+### [Prometheus](#prometheus)
 
 [Download prometheus](https://prometheus.io/download/)
 
@@ -305,7 +305,7 @@ sudo syetemctl start prometheus
 
 You should now see node exporter on your local network ip at port 9090, `http://192.168.1.123:9090/`
 
-### Grafana
+### [Grafana](#grafana)
 
 You can install grafana enterprise. Its the same as the free version with the paywalled features in the package, but you can just leave those behind the paywall.
 
@@ -345,9 +345,9 @@ In grafana,
 
 Now you should have real-time metrics for your server!
 
-## Logging
+## [Logging](#logging)
 
-### Promtail
+### [Promtail](#promtail)
 
 Promtail is necessary to get your logs in to Loki and Grafana.
 
@@ -415,7 +415,7 @@ ExecStart=/opt/promtail -config.file /opt/promtail.yml
 WantedBy=multi-user.target
 ```
 
-### Loki
+### [Loki](#loki)
 
 Grafana Loki is a nice way to get your logs from journalctl and plex in to Grafana, so you can play around with those. It will also be useful when you want to do more with your server in the future, like run a website or some application.
 
@@ -456,7 +456,7 @@ ExecStart=/opt/loki -config.file /opt/loki.yml
 WantedBy=multi-user.target
 ```
 
-# In Summary
+# [In Summary](#in-summary)
 
 This guide is meant mostly as a self-refernce, but I hope it is helpful to anybody trying to start their own local server.
 
@@ -477,7 +477,7 @@ Everything should be running via systemd with their logs accessible through jour
 
 I will write some other entries exploring more in-depth use of this software, this post is just about the initial setup.
 
-## Related Pages
+## [Related Pages](#related-pages)
 
 I will come back and link to these when I write them.
 
