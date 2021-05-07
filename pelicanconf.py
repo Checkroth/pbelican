@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 from __future__ import unicode_literals
+import os
+
 
 AUTHOR = 'charles'
 SITENAME = 'software-and-stuff'
-SITEURL = 'https://checkroth.com'
-SITEURL = ''
+SITEURL = os.getenv('SITEURL', 'https://checkroth.com')
 SITEDESCRIPTION = 'Blog and info'
 SITETITLE = 'Charles Henry Heckroth'
 SITESUBTITLE = 'My Notes & Blog'
@@ -41,8 +42,9 @@ AUTHOR_FEED_RSS = None
 USE_FOLDER_AS_CATEGORY = True
 
 # Blogroll
+DISABLE_URL_HASH = True
 LINKS = (
-    ('Blog', '/'),
+    ('Blog', f'{SITEURL}/category/blog.html'),
     ('Resume', 'https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view'),
 )
 
@@ -59,8 +61,7 @@ TWITTER_USERNAME = '@checkroth'
 # Local site links
 HOME_HIDE_TAGS = False
 MAIN_MENU = True
-MENUITEMS = (('Blog', '/'),
-             ('Archives', '/archives.html'),
+MENUITEMS = (('Archives', '/archives.html'),
              ('Categories', '/categories.html'),
              ('Tags', '/tags.html'),)
 
@@ -71,7 +72,7 @@ CC_LICENSE = {
     'version': '4.0',
     'slug': 'by-sa'
 }
-COPYRIGHT_YEAR = 2019
+COPYRIGHT_YEAR = 2021
 
 
 STATIC_PATHS = ['extra', 'images']
