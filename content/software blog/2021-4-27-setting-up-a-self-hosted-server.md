@@ -333,7 +333,6 @@ You should now see node exporter on your local network ip at port 3000, `http://
 
 You may want to set the password or reconfigure. The configuraiton lives in `/etc/grafana/grafana.ini`.
 
-[//]: TODO:: Add a link to the grafana-behind-reverse-proxy blog
 You can change things like the port, admin_password, or setup SSL or a custom domain here. More details in a future post.
 
 Now that you have grafana, prometheus, and node_exporter running, you'll want to set up your first dashboard.
