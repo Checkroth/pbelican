@@ -1,4 +1,4 @@
-Title: Preventing CircleCI Task from Running on Same Commit
+Title: Preventing CircleCI Tasks from Running on the Same Commit
 Date: 2021-09-06
 Modified: 2021-09-06
 Category: blog
@@ -25,7 +25,7 @@ Below are the sources I used to figure out the exact configuration to do this.
 
 ## [Raw code](#Raw code)
 
-```
+```yaml
 version: 2.1
 jobs:
   build:
