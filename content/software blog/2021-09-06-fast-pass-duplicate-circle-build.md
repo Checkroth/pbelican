@@ -29,7 +29,6 @@ Below are the sources I used to figure out the exact configuration to do this.
 version: 2.1
 jobs:
   build:
-    working_directory: ~/tt-server
     docker:
       - image: circleci/python:3.7.3
     steps:
