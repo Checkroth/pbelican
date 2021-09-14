@@ -5,6 +5,7 @@ Category: blog
 Tags: linux, ubuntuserver, selfhosting, nginx
 Slug: pointing-domain-to-server
 Authors: Charles Heckroth
+Status: Draft
 
 This blog is a simple static site running on a computer in my home.
 
