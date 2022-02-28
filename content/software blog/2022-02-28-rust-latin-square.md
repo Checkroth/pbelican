@@ -50,12 +50,12 @@ C | 3 4 1 2 |
 D | 4 1 2 3 |
 ```
 
-This square just shifts each column one to the right for each row. This satisfies the requirements of the latin square perfectly, however in the context of a game where you are passing these symbols down the line.
+This square just shifts each column one to the right for each row. This satisfies the requirements of the latin square perfectly, however in the context of a game where you are passing these symbols down the line is not ideal.
 
 This would be very boring for player A every drawing they continue was created by player B. The same for B with respect to C, C with respect to D, and D with respect to A.
 
 
-### [Balanced Latin Squares](#balanced-latin-squares)
+## [Balanced Latin Squares](#balanced-latin-squares)
 
 To maximize interaction between players, by making sure that each player gets to continue the drawing from each other player at least once, we want to implement a **balanced** latin square.
 
@@ -93,49 +93,57 @@ The requirements of the latin square create a sort of deadlock that prevent the 
 A latin square is an NxN sized grid. In the context of a game, we probably want to allow for configuration for more or fewer rounds.
 This means we might want fewer turns than we have players (not a problem), or more turns than we have players (un-balanceable).
 
-### [Nearly-balanced Latin Squares](#nearly-balanced-squares)
+## [Nearly balanced Latin Squares](#nearly-balanced-latin-squares)
 
 None of the above issues are actually mathematically solvable. You will always have repeats and holes. For a game, "close enough" is fine, so we want to make *nearly* balanced squares.
 
-#### Dealing with odd-numbered grids
+### Dealing with odd-numbered grids
 
 The issue with balancing odd number grids is unsolvable.
 
 Most places will state that in order to perfectly balance your odd-number latin square, you have to double the size of the square.
 
-In the context of a game turn order, this really doesn't make any sense. Instead, we want to modify our rules:
+In the context of a game turn order, this really doesn't make any sense. Instead, we just have to break a rule, and add an extra symbol or allow 1 repeat.
 
-- maintain the rules of the latin square: one symbol per row, one symbol per column
-- remove the rule that no symbol can make the same vertical move more than once
-- calculate the minimum repeat moves for the square size, and make sure that you don't exceed that repeat amount for any symbol.
+- Add 1 to the grid width. Calculate  the `n+1 x n` grid, and lop off the last column.
+  - This approach will give you n+1 symbols with no repeats.
+- Remove 1 from the grid width. Calculate the `n-1 x n` grid, and then calculate a completely random last row that uses each symbol only once.
+  - This approach will give you n symbols with each symbol repeating exactly once. Receive order will also repeat up to n times, once-per-user.
 
-Calculating this is a beast of its own. However, these numbers never change so they only have to be calculated once, and I already did that work for you. I will include a gist that does this calculation and the results.
-
-#### Deailing with tall grids
+### Deailing with tall grids
 
 ```
-A | 1 2 3
-B | 3 1 4
-C | 1 3 2
+A | 1 3 2
+B | 2 1 4
+C | 3 4 1
 D | 4 2 3
 ```
 
 A tall grid cannot meet the requirements of a latin grid, because there are more symbols than there are columns.
 
-The new rules in this case should be:
+The new rules in this case are the same as a regularly balanced latin square. Each symbol should appear exactly once per round. This is easily balanced using the same logic you would use for a regular even-numbered square.
 
-- find best possible # per symbol (2, 2, 2, 3)
-- Ensure that its as baalanced as possible (not 4, 4, 1, 1, etc)
-
-#### Dealing with wide grids
+### Dealing with wide grids
 
 ```
-A | 1 3 1 2
-B | 2 1 4 3
-C | 3 4 2 4
+A | 1   3   2   4?
+B | 2   4?  1   3
+C | 3   2   4?  1
 ```
 
-# [Rust Implementation](#rust-impl)
+Wide grids are also deceptively simple. It is the inverse of the tall grid.
+
+There are two options from a game perspective: Either include extra symbols so that there is a symbol in every slot, or have only 3 symbols and include passes where the extra symbols would be.
+
+Where a tall grid will have each symbol appear `n=grid_width` times, the wide grid will have each symbol appear `n=grid_height` times. In other words, *in a rectangular grid, each symbol should show up as many times as the shortest grid dimension has entries*.
+
+# [Rust Implementation](#rust-implementation)
+
+## [Perfectly Balanced Latin Square](#perfectly-balanaced-latin-square)
+
+## [Odd Latin Square](#odd-latin-square)
+
+## [Latin Rectangles](latin-rectangles)
 
 # [Sources](#sources)
 
