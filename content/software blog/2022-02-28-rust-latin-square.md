@@ -1,4 +1,4 @@
-Title: Rust Implementation of Latin Square
+Title: Rust Implementation of Latin Square Generation
 Date: 2022-03-18
 Modified: 2022-03-18
 Category: blog
