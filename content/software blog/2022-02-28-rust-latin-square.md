@@ -1,6 +1,6 @@
 Title: Rust Implementation of Latin Square
-Date: 2022-02-28
-Modified: 2022-02-28
+Date: 2022-03-18
+Modified: 2022-03-18
 Category: blog
 Tags: rust, mathematics, prettypileofbones, devlog
 Slug: rust-latin-square
