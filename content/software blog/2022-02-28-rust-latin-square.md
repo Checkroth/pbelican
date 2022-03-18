@@ -52,7 +52,7 @@ D | 4 1 2 3 |
 
 This square just shifts each column one to the right for each row. This satisfies the requirements of the latin square perfectly, however in the context of a game where you are passing these symbols down the line is not ideal.
 
-This would be very boring for player A every drawing they continue was created by player B. The same for B with respect to C, C with respect to D, and D with respect to A.
+This would be very boring for player A, since every turn they are continuing a drawing from player B. The same for B with respect to C, C with respect to D, and D with respect to A.
 
 
 ## [Balanced Latin Squares](#balanced-latin-squares)
@@ -74,7 +74,7 @@ However, in the context of the turn orders of a game, there are two glaring issu
 
 **1. Balanced latin squares must have an even number of symbols.**
 
-Note the following latin square. While the receive order is never the same twice in a row, there is no solution where each player does not receive from another player two or more times.
+Note the following latin square. There is no solution where each player does not receive from another player two or more times.
 
 There are more sufficient solutions than the following, but it is an example of the mess that happens when you have an odd number:
 
@@ -86,7 +86,7 @@ D | 4 1 5 3 2 | receive order: A, C, A, C
 E | 5 3 2 1 4 | receive order: C, A, B, A
 ```
 
-The requirements of the latin square create a sort of deadlock that prevent the beautiful sollution of "All rows get a symbol from each potential user".
+The requirements of the latin square create a sort of deadlock that prevent the beautiful solution of "All rows get a symbol from each potential user".
 
 **2. Latin squares must be even in row and height**
 
@@ -139,11 +139,16 @@ Where a tall grid will have each symbol appear `n=grid_width` times, the wide gr
 
 # [Rust Implementation](#rust-implementation)
 
-## [Perfectly Balanced Latin Square](#perfectly-balanaced-latin-square)
+With all of the above concidered, perfectly balanced latin squares are mysterious things that simply cannot be easily generated. There are three acceptable approaches for my specific use-case:
 
-## [Odd Latin Square](#odd-latin-square)
+1. Limit the number of players and rounds to something reasonable, so that we can just brute-force the solutions
+2. Implement Jacobson and Matthews approach, which won't garuntee perfection, but will generate random balanced-ish squares reliably
+3. Pre-emptive brute force: Use (1), or (2) with a post-check to see if its balanced, generate as many squares as we can up to reasonable dimensions. Include these as a fixture in the program and randomly select them
 
-## [Latin Rectangles](latin-rectangles)
+For my purposes, I have decided to go with just (2) for now. I may write another post in the future if I decide to expand on it.
+
+The implementation can be found [here](https://github.com/Checkroth/combinatorial_patterns). It is mostly a re-implementation of [Ignacio Gallego Sagastume's C++ implementation](https://github.com/bluemontag/igs-lsgp/blob/master/igs-lsgp/src/jacomatt/model/IncidenceCube.java), though implemented in a way that will hopefully be re-usable. It is [published on crates.io](https://crates.io/crates/combinatorial_patterns).
+
 
 # [Sources](#sources)
 
@@ -151,3 +156,4 @@ Where a tall grid will have each symbol appear `n=grid_width` times, the wide gr
 - [Generation of Random Latin Squares Step by Step and Graphically, Ignacio Gallego Sagastume](http://sedici.unlp.edu.ar/bitstream/handle/10915/42155/Documento_completo.pdf?sequence=1)
 - [Balanced Latin Square Generator, Damien Masson](https://cs.uwaterloo.ca/~dmasson/tools/latin_square/)
 - [A program for making completely balanced Latin Square designs employing a systemic method, Beob Gyun Kim, Taemin Kim](https://www.researchgate.net/publication/262752684_A_program_for_making_completely_balanced_Latin_Square_designs_employing_a_systemic_method)
+- [Generating random latin squares, StackOverflow](https://math.stackexchange.com/questions/63131/generate-random-latin-squares)
