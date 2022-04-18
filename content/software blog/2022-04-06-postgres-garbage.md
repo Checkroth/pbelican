@@ -20,6 +20,23 @@ Ultimately, we were able to reduce query times from ~30+ seconds to ~20ms by man
 
 # The Problem
 
+The surface level problem is obviously that our tables are big and bloated, filled with god knows what data from years ago.
+
+The real issue however is that postgres *should* be cleaning this up itself, and it isn't. But *why*?
+
 # The Solution
 
+Occasionally running manual the postgres analyzer and vacuum by hand is *not* a solution.
+The long term solution is to fix whatever was preventing these things from running on their own. We never messed with our postgres configuration, and by default it should be regularly cleaning this stuff up on its own.
+
+
+
 # How to make my stuff work more good
+
+# Sources
+
+- [Reasons Why Vacuum Won't Remove Dead Code, Laurenz Albe, cybertec-postgresql](https://www.cybertec-postgresql.com/en/reasons-why-vacuum-wont-remove-dead-rows/)
+- [Stale Statistics Cause Table Bloat, Laurenz Albe, cybertec-postgresql](https://www.cybertec-postgresql.com/en/stale-statistics-cause-table-bloat/)
+- [Understanding Autovacuum in Amazon RDS for Postgresql Environments, Anuraag Deekonda and Baji Shaik, aws](https://aws.amazon.com/blogs/database/understanding-autovacuum-in-amazon-rds-for-postgresql-environments/)
+- [Trouble with Autoanalyze, Tomas Vondra, 2ndquadrant](https://www.2ndquadrant.com/en/blog/when-autovacuum-does-not-vacuum/)
+- [](https://www.2ndquadrant.com/en/blog/autovacuum-tuning-basics/)
