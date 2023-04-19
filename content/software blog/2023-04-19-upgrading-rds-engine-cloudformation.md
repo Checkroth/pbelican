@@ -63,7 +63,7 @@ In a future post, I will outline my approach to tracking downtime from major inf
 
 ## Catching Up with CloudFormation
 
-WARNING: This step ALSO can incur downtime. To sync up, the DBParameterGroup may be recreated, which requires a databaes restart. I wouldn't consider myself in the clear until this step is ALSO completed, you do not want accidental downtime in the future for unrelated infrastructure deployments.
+WARNING: This step ALSO will incur downtime. To sync up, the DBParameterGroup must be recreated, which requires a database restart. When upgrading manually, the parameter group is set set to "default".
 
 Below is the updated config. All that has changed is `DBParameters::Properties::Family` from `postgres11` to `postgres14`.
 
