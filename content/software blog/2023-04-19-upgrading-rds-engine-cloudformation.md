@@ -6,7 +6,9 @@ Tags: aws, rds, infrastructure, devlog
 Slug: cloudformation-rds-engine-upgrade
 Authors: Charles Heckroth
 
-I manage all of my AWS infrastructure with Cloudformation, and have for several years. While this is usually very helpful, sometimes there are snags with one of the many AWS services and how cloudformation attempts to interact with them. Upgrading my database version was one of these.
+I manage all of my AWS infrastructure with Cloudformation, and have for several years. While this is usually very helpful, sometimes there are snags with one of the many AWS services and how cloudformation attempts to interact with them.
+
+Upgrading my database version was one of these. This post outlines how I upgraded my in-use postgres database from 11 to 15 with a mix of manual operations and cloudformation changeset deployments.
 
 
 # The Details
@@ -69,7 +71,18 @@ Below is the updated config. All that has changed is `DBParameters::Properties::
 
 Simply execute the changeset as you would any other changeset.
 
-In my case, I execute `aws cloudformation deploy --template-file template.yaml --stack-name my-stack-develop --capabilities CAPABILITY_NAMED_IAM --parameter-overrides Env=develop --no-execute-changeset`, and then confirm the changeset & manually execute in the Cloudformation console.
+In my case, I execute
+
+```
+aws cloudformation deploy \
+  --template-file template.yaml \
+  --stack-name my-stack-develop \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides Env=develop \
+  --no-execute-changeset
+```
+
+and then confirm the changeset & manually execute in the Cloudformation console.
 
 
 ```yaml
