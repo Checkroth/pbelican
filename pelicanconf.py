@@ -10,7 +10,7 @@ SITEURL = os.getenv('SITEURL', 'https://checkroth.com')
 SITEDESCRIPTION = 'Blog and info'
 SITETITLE = 'Charles Henry Heckroth'
 SITESUBTITLE = 'My Notes & Blog'
-SITELOGO = '/images/me.jpg'
+SITELOGO = '/images/me2.jpeg'
 FAVICON = ''
 BROWSER_COLOR = '#FFFFFF'
 THEME = 'Flex'
@@ -45,7 +45,7 @@ USE_FOLDER_AS_CATEGORY = True
 DISABLE_URL_HASH = True
 LINKS = (
     ('Blog', f'{SITEURL}/category/blog.html'),
-    ('Resume', 'https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view'),
+    ('Resume', 'https://drive.google.com/file/d/1T80kxtu-rTTqWSHAqkLZAsEqcBnmXwFK/view?usp=sharing'),
 )
 
 # Social widget
