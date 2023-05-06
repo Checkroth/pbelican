@@ -44,25 +44,26 @@
     <meta name="msapplication-TileColor" content="#FFFFFF">
 
 <meta name="author" content="Charles Heckroth" />
-<meta name="description" content="Roping in Complexity, Decay, and Duplication in a Growing Scala Project All software projects will grow in complexity and decay over time. Lehman&#39;s Laws of software evolution state that as a system evolves, &#34;its complexity increases unless work is done to maintain or reduce it&#34;, and that a system &#34;must …" />
-<meta name="keywords" content="scala, conference, scalamatsuri">
+<meta name="description" content="This blog is a simple static site running on a computer in my home. My domain from namecheap is pointing to the public IP of my home router. Aside from this static site, some other things are accessible through my domain name, various private projects, slack webhooks, grafana, etc. This …" />
+<meta name="keywords" content="linux, ubuntuserver, selfhosting, nginx">
 
 <meta property="og:site_name" content="software-and-stuff"/>
-<meta property="og:title" content="Roping in Complexity, Decay, and Duplication in a Growing Scala Project"/>
-<meta property="og:description" content="Roping in Complexity, Decay, and Duplication in a Growing Scala Project All software projects will grow in complexity and decay over time. Lehman&#39;s Laws of software evolution state that as a system evolves, &#34;its complexity increases unless work is done to maintain or reduce it&#34;, and that a system &#34;must …"/>
+<meta property="og:title" content="Pointing a Domain to a Self-hosted Server"/>
+<meta property="og:description" content="This blog is a simple static site running on a computer in my home. My domain from namecheap is pointing to the public IP of my home router. Aside from this static site, some other things are accessible through my domain name, various private projects, slack webhooks, grafana, etc. This …"/>
 <meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="https://checkroth.com/2017-scala-matsuri-cfp.html"/>
+<meta property="og:url" content="https://checkroth.com/drafts/pointing-domain-to-server.html"/>
 <meta property="og:type" content="article"/>
-<meta property="article:published_time" content="2016-09-13 00:00:00+09:00"/>
-<meta property="article:modified_time" content=""/>
+<meta property="article:published_time" content="2021-05-08 00:00:00+09:00"/>
+<meta property="article:modified_time" content="2021-05-08 00:00:00+09:00"/>
 <meta property="article:author" content="https://checkroth.com/author/charles-heckroth.html">
 <meta property="article:section" content="blog"/>
-<meta property="article:tag" content="scala"/>
-<meta property="article:tag" content="conference"/>
-<meta property="article:tag" content="scalamatsuri"/>
+<meta property="article:tag" content="linux"/>
+<meta property="article:tag" content="ubuntuserver"/>
+<meta property="article:tag" content="selfhosting"/>
+<meta property="article:tag" content="nginx"/>
 <meta property="og:image" content="/images/me.jpg">
 
-  <title>software-and-stuff &ndash; Roping in Complexity, Decay, and Duplication in a Growing Scala Project</title>
+  <title>software-and-stuff &ndash; Pointing a Domain to a Self-hosted Server</title>
 
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script>
@@ -144,9 +145,9 @@
 <article class="single">
   <header>
       
-    <h1 id="2017-scala-matsuri-cfp">Roping in Complexity, Decay, and Duplication in a Growing Scala Project</h1>
+    <h1 id="pointing-domain-to-server">Pointing a Domain to a Self-hosted Server</h1>
     <p>
-          Posted on September 13, 2016 in <a href="https://checkroth.com/category/blog.html">blog</a>
+          Posted on May 08, 2021 in <a href="https://checkroth.com/category/blog.html">blog</a>
 
 
     </p>
@@ -154,24 +155,60 @@
 
 
   <div>
-    <!-- Summary: This was my (unaccepted) proposal to Scala Matsuri 2017. -->
-<h1 id="roping-in-complexity-decay-and-duplication-in-a-growing-scala-project">Roping in Complexity, Decay, and Duplication in a Growing Scala Project</h1>
-<p>All software projects will grow in complexity and decay over time. 
-<a href="https://en.wikipedia.org/wiki/Lehman's_laws_of_software_evolution">Lehman's Laws</a> of software evolution state that as a system evolves, "its complexity increases unless work is done to maintain or reduce it", and that a system "must be continually adapted or it becomes progressively less satisfactory".</p>
-<p>Scala has a lot of tools to help combat complexity and decay. I will cover my own process of spotting decaying components of our system, and how my team and I apply functional programming concepts to grow our system without wide-spread, unmaintainable complexity growth.
-Specifically, how we define and practice standards within our group of engineers and how I utilized Shapeless and HLists to remove heavy code duplication.</p>
-<p>I will briefly touch on the following specific topics:
-- Scalaz and Functional Syntax as a standard
-- Code formatting with Scalafmt
-- Common structures vs. Copied Code
-- Doing it right the first time
-- Removing duplicated code using Shapeless</p>
+    <p>This blog is a simple static site running on a computer in my home.</p>
+<p>My domain from <a href="https://www.namecheap.com/">namecheap</a> is pointing to the public IP of my home router.</p>
+<p>Aside from this static site, some other things are accessible through my domain name, various private projects, slack webhooks, grafana, etc.</p>
+<p>This post is a guide to setting this up, using:</p>
+<ul>
+<li>Namecheap (or any domain provider, but my specific setup is with namecheap)</li>
+<li>Nginx (for running multiple services behind the same domain)</li>
+<li>letsencrypt for SSL</li>
+</ul>
+<h1 id="network-setup">Network Setup</h1>
+<h2 id="finding-your-private-and-public-ip">Finding your Private and Public IP</h2>
+<p>Same process as outlined <a href="{filename}/2021-4-27-setting-up-a-self-hosted-server.md">in the private server setup</a></p>
+<h3 id="private"><a href="#private">private</a></h3>
+<p>run <code>ifconfig</code>.</p>
+<p>Ignore entires like <code>127.0.0.1</code></p>
+<p>Your private network IP address should be something like <code>192.168.1.123</code>.</p>
+<h3 id="public"><a href="#public">public</a></h3>
+<p>Your public IP address will be necessary for a lot of things, most notable the following "Going Remote" step.</p>
+<p>It can be surprisingly difficult to find your outgoing IPV4 address through cli tools, depending on your router/modem setup.</p>
+<p>Just hit <code>curl https://ipinfo.io/ip</code> to get your public IP.</p>
+<h2 id="port-forwarding_1">Port Forwarding</h2>
+<p>You want to make sure your router is forwarding port 80 and 443 to the private IP found above. The process for this is different for every router.</p>
+<p>Even if you don't want port 80 forwarded, you will need it at first to get SSL set up.</p>
+<h2 id="configuring-your-domain">Configuring your Domain</h2>
+<p>This step largely depends on your domain provider.</p>
+<p>Following the steps for whever you get your domain, make an A record pointing to the <em>public</em> IP from above.</p>
+<h2 id="setting-up-letsencrypt">Setting up LetsEncrypt</h2>
+<p>Basically just <a href="https://www.nginx.com/blog/using-free-ssltls-certificates-from-lets-encrypt-with-nginx/">this nginx post</a>.</p>
+<p>Install certbot and the nginx plugin.</p>
+<div class="highlight"><pre><span></span>apt-get update
+sudo apt-get install certbot
+apt-get install python3-certbot-nginx
+</pre></div>
+<p>Make sure nginx is listening to port 80 on your domain name.</p>
+<div class="highlight"><pre><span></span><span class="n">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">listen</span><span class="w"> </span><span class="mi">80</span><span class="w"> </span><span class="n">default_server</span><span class="p">;</span>
+<span class="w">    </span><span class="n">listen</span><span class="w"> </span><span class="p">[::]:</span><span class="mi">80</span><span class="w"> </span><span class="n">default_server</span><span class="p">;</span>
+<span class="w">    </span><span class="n">root</span><span class="w"> </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="p">;</span>
+<span class="w">    </span><span class="n">server_name</span><span class="w"> </span><span class="n">mydopeserver</span><span class="o">.</span><span class="n">com</span><span class="w"> </span><span class="n">www</span><span class="o">.</span><span class="n">mydopeserver</span><span class="o">.</span><span class="n">com</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<h1 id="nginx-web-setup_1">Nginx / Web Setup</h1>
+<h2 id="with-letsencrypt">With letsencrypt</h2>
+<h2 id="pointing-to-a-static-site">Pointing to a static site</h2>
+<h2 id="reverse-proxies-for-other-stuff">Reverse proxies for other stuff</h2>
+<h2 id="ssl-for-grafana">SSL for Grafana</h2>
+<p>If you want to access grafana behind your nginx reverse proxy, through your domain name, over SSL, you will need to do some configuration on grafana itself.</p>
   </div>
   <div class="tag-cloud">
     <p>
-      <a href="https://checkroth.com/tag/scala.html">scala</a>
-      <a href="https://checkroth.com/tag/conference.html">conference</a>
-      <a href="https://checkroth.com/tag/scalamatsuri.html">scalamatsuri</a>
+      <a href="https://checkroth.com/tag/linux.html">linux</a>
+      <a href="https://checkroth.com/tag/ubuntuserver.html">ubuntuserver</a>
+      <a href="https://checkroth.com/tag/selfhosting.html">selfhosting</a>
+      <a href="https://checkroth.com/tag/nginx.html">nginx</a>
     </p>
   </div>
 

@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/pygments/colorful.min.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/solid.css">
+
+    <link href="https://checkroth.com/static/custom.css" rel="stylesheet">
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-136401999-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#FFFFFF">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#FFFFFF">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Microsoft EDGE -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+
+<meta name="author" content="Charles Heckroth" />
+<meta name="description" content="A short outline on how to game CircleCI&#39;s caching mechanic to prevent sluggish builds from running on the same commit more than once. Useful if you have some very slow CI steps and use Tags to automatically deploy from CircleCI. In my case, our test suite could take 10 minutes …" />
+<meta name="keywords" content="circleci, devops">
+
+<meta property="og:site_name" content="software-and-stuff"/>
+<meta property="og:title" content="Preventing CircleCI Tasks from Running on the Same Commit"/>
+<meta property="og:description" content="A short outline on how to game CircleCI&#39;s caching mechanic to prevent sluggish builds from running on the same commit more than once. Useful if you have some very slow CI steps and use Tags to automatically deploy from CircleCI. In my case, our test suite could take 10 minutes …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="https://checkroth.com/fast-pass-circleci.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2021-09-06 00:00:00+09:00"/>
+<meta property="article:modified_time" content="2021-09-06 00:00:00+09:00"/>
+<meta property="article:author" content="https://checkroth.com/author/charles-heckroth.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="circleci"/>
+<meta property="article:tag" content="devops"/>
+<meta property="og:image" content="/images/me.jpg">
+
+  <title>software-and-stuff &ndash; Preventing CircleCI Tasks from Running on the Same Commit</title>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-3090577057275093",
+      enable_page_level_ads: true
+    });
+  </script>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="https://checkroth.com">
+        <img src="/images/me.jpg" alt="Charles Henry Heckroth" title="Charles Henry Heckroth">
+      </a>
+      <h1><a href="https://checkroth.com">Charles Henry Heckroth</a></h1>
+
+<p>My Notes & Blog</p>
+      <nav>
+        <ul class="list">
+          <li><a href="https://checkroth.com/pages/about-me.html">About Me</a></li>
+
+          <li><a href="https://checkroth.com/category/blog.html" target="_blank">Blog</a></li>
+          <li><a href="https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view" target="_blank">Resume</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+          <li>
+            <a  class="sc-envelope" href="mailto:checkroth@gmail.com" target="_blank">
+            <i class="fas fa-envelope">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-github" href="https://www.github.com/Checkroth" target="_blank">
+            <i class="fab fa-github">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-linkedin" href="https://www.linkedin.com/in/charlesheckroth" target="_blank">
+            <i class="fab fa-linkedin">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-twitter" href="http://www.twitter.com/checkroth" target="_blank">
+            <i class="fab fa-twitter">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-stack-overflow" href="https://stackoverflow.com/users/1037971/charles" target="_blank">
+            <i class="fab fa-stack-overflow">
+            </i>
+          </a></li>
+      </ul>
+    </div>
+
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <ins class="adsbygoogle ads-aside"
+           data-ad-client="ca-pub-3090577057275093"
+           data-ad-slot="7734708573"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://checkroth.com">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="fast-pass-circleci">Preventing CircleCI Tasks from Running on the Same Commit</h1>
+    <p>
+          Posted on September 06, 2021 in <a href="https://checkroth.com/category/blog.html">blog</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>A short outline on how to game CircleCI's caching mechanic to prevent sluggish builds from running on the same commit more than once.</p>
+<p>Useful if you have some very slow CI steps and use Tags to automatically deploy from CircleCI.
+In my case, our test suite could take 10 minutes to run, and had absolutely zero merit in running on the exact same codebase twice.</p>
+<p>You could improve this to cache on a checksum of certain code contents instead of commit sha, but this is the simplest and most obvious use-case.</p>
+<h1 id="resources"><a href="#Resources">Resources</a></h1>
+<p>Below are the sources I used to figure out the exact configuration to do this.</p>
+<ul>
+<li><a href="https://circleci.com/docs/2.0/configuration-reference/#ending-a-job-from-within-a-step">On ending CircleCI jobs early</a></li>
+<li><a href="https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables">On using environment variables in cache keys</a></li>
+<li><a href="https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables">On getting the current commit as an environment variable</a></li>
+</ul>
+<h1 id="saving-successful-status"><a href="#Saving Successful Status">Saving Successful Status</a></h1>
+<h2 id="raw-code"><a href="#Raw code">Raw code</a></h2>
+<div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.1</span>
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">docker</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">circleci/python:3.7.3</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">restore_cache</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">.Environment.CIRCLE_SHA1</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Check for previous success on same commit</span>
+<span class="w">          </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">            </span><span class="no">if test -f ".success"; then</span>
+<span class="w">              </span><span class="no">echo "Previous successful build exists. Pre-passing tests..."</span>
+<span class="w">              </span><span class="no">circleci-agent step halt</span>
+<span class="w">            </span><span class="no">else</span>
+<span class="w">              </span><span class="no">echo "Commit has no successful cached build, running tests..."</span>
+<span class="w">            </span><span class="no">fi</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">execute-my-test</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">run</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="s">"touch</span><span class="nv"> </span><span class="s">.success"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">save_cache</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">.Environment.CIRCLE_SHA1</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="w">          </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">".success"</span>
+
+<span class="nt">workflows</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">main</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">jobs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+</pre></div>
+<h2 id="breakdown"><a href="#Breakdown">Breakdown</a></h2>
+<p><strong>1) restore_cache</strong></p>
+<p>This checks for a cache with the current commit as its key. We set this as the last step of the job.</p>
+<p><strong>2) run success check</strong></p>
+<p>This is where we use the circleci-agent linked in <a href="#Resources">Resources</a>.</p>
+<p>We simply check for a file's presence and end the build with circleci-agent if it exists.</p>
+<p>This file is created and cached at the end of the job.</p>
+<p><strong>3) run execute-my-test</strong></p>
+<p>This is a placeholder for whatever your actual job is supposed to do. In my case its a very large and sluggish django test suite.</p>
+<p><strong>4) run touch .success</strong></p>
+<p>Simply create an empty file. I named it .success, but if you already have a file with that name in your project, you want to name it something different. Make sure whatever you name it is reflected in <strong>2) run success check</strong> as well.</p>
+<p><strong>5) save_cache</strong></p>
+<p>Put the file you just created in a cache keyed by the current commit hash.</p>
+<p>This will be restored in (1) and caught in (2) to end the bulid early if a build is run on this same commit again.</p>
+<p>This step will only be run if every step before it was successful, so it is safe at this point to store the successful state. Make sure its the last step!</p>
+<h2 id="notes">Notes</h2>
+<ol>
+<li>There might be a smarter way to do this. If so, please let me know!</li>
+<li>Since this is using a cache, it is a short-term solution. I don't know how long CircleCI keeps its build caches around, but if you need to skip jobs based on previous success months or years in later, you'll have to think of something else.</li>
+<li>This still runs the job. There are workflow filters that can completely skip the job, but no way to base that on past success that I know of.</li>
+</ol>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://checkroth.com/tag/circleci.html">circleci</a>
+      <a href="https://checkroth.com/tag/devops.html">devops</a>
+    </p>
+  </div>
+
+
+
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle ads-responsive"
+         data-ad-client="ca-pub-3090577057275093"
+         data-ad-slot="6895080254"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+<!-- Disqus -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'checkroth';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+        Please enable JavaScript to view comments.
+
+</noscript>
+<!-- End Disqus -->
+</article>
+
+    <footer>
+<p>
+  &copy;  2021 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " software-and-stuff ",
+  "url" : "https://checkroth.com",
+  "image": "/images/me.jpg",
+  "description": "Blog and info"
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/pygments/colorful.min.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/solid.css">
+
+    <link href="https://checkroth.com/static/custom.css" rel="stylesheet">
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-136401999-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#FFFFFF">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#FFFFFF">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Microsoft EDGE -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+
+<meta name="author" content="Charles Heckroth" />
+<meta name="description" content="While working on a multiplayer browser game using a rust websocket server, I ran to unexpected difficulty in trying to determine the turn order for a variable sized group of people. The solution to my issue is a balanced latin square, which allows me to predetermine turn order for my …" />
+<meta name="keywords" content="rust, mathematics, prettypileofbones, devlog">
+
+<meta property="og:site_name" content="software-and-stuff"/>
+<meta property="og:title" content="Rust Implementation of Latin Square Generation"/>
+<meta property="og:description" content="While working on a multiplayer browser game using a rust websocket server, I ran to unexpected difficulty in trying to determine the turn order for a variable sized group of people. The solution to my issue is a balanced latin square, which allows me to predetermine turn order for my …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="https://checkroth.com/rust-latin-square.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2022-03-18 00:00:00+09:00"/>
+<meta property="article:modified_time" content="2022-03-18 00:00:00+09:00"/>
+<meta property="article:author" content="https://checkroth.com/author/charles-heckroth.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="rust"/>
+<meta property="article:tag" content="mathematics"/>
+<meta property="article:tag" content="prettypileofbones"/>
+<meta property="article:tag" content="devlog"/>
+<meta property="og:image" content="/images/me.jpg">
+
+  <title>software-and-stuff &ndash; Rust Implementation of Latin Square Generation</title>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-3090577057275093",
+      enable_page_level_ads: true
+    });
+  </script>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="https://checkroth.com">
+        <img src="/images/me.jpg" alt="Charles Henry Heckroth" title="Charles Henry Heckroth">
+      </a>
+      <h1><a href="https://checkroth.com">Charles Henry Heckroth</a></h1>
+
+<p>My Notes & Blog</p>
+      <nav>
+        <ul class="list">
+          <li><a href="https://checkroth.com/pages/about-me.html">About Me</a></li>
+
+          <li><a href="https://checkroth.com/category/blog.html" target="_blank">Blog</a></li>
+          <li><a href="https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view" target="_blank">Resume</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+          <li>
+            <a  class="sc-envelope" href="mailto:checkroth@gmail.com" target="_blank">
+            <i class="fas fa-envelope">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-github" href="https://www.github.com/Checkroth" target="_blank">
+            <i class="fab fa-github">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-linkedin" href="https://www.linkedin.com/in/charlesheckroth" target="_blank">
+            <i class="fab fa-linkedin">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-twitter" href="http://www.twitter.com/checkroth" target="_blank">
+            <i class="fab fa-twitter">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-stack-overflow" href="https://stackoverflow.com/users/1037971/charles" target="_blank">
+            <i class="fab fa-stack-overflow">
+            </i>
+          </a></li>
+      </ul>
+    </div>
+
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <ins class="adsbygoogle ads-aside"
+           data-ad-client="ca-pub-3090577057275093"
+           data-ad-slot="7734708573"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://checkroth.com">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="rust-latin-square">Rust Implementation of Latin Square Generation</h1>
+    <p>
+          Posted on March 18, 2022 in <a href="https://checkroth.com/category/blog.html">blog</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>While working on a multiplayer browser game using a rust websocket server, I ran to unexpected difficulty in trying to determine the turn order for a variable sized group of people.</p>
+<p>The solution to my issue is a balanced latin square, which allows me to predetermine turn order for my players.</p>
+<h1 id="the-problem"><a href="#the-problem">The Problem</a></h1>
+<p>The game is a web implementation of an older-than-time-itself group paper game. The game involves drawing on a piece of paper, and then passing that paper to another person, and for that person to continue the drawing.</p>
+<p>For the web implementation, I want everybody to always have something to do so that it doesn't get boring. This means that we need as many drawings as we have players. Assuming we have at most as many rounds as we have players, the paper-passing turn order needs to meet the following criteria:</p>
+<ul>
+<li>No drawing can be repated for any player</li>
+<li>No drawing can be repeated in any single round</li>
+<li>Paper-passing should be as random as possible, so that Player 2 isn't always continuing Player 1's drawing, as that would get boring very quickly if you're doing multiple go-arounds.</li>
+</ul>
+<p>Consider users A through D, and drawings 1 through 4. Each user should get each drawing once. A fun turn order would be something like the following (each column is a turn of the game, and the # is the ID of the drawing):</p>
+<div class="highlight"><pre><span></span>A | 1 2 4 3 |
+B | 2 3 1 4 |
+C | 3 4 2 1 |
+D | 4 1 3 2 |
+</pre></div>
+<p>With this result,</p>
+<ul>
+<li>no user is ever continuing another single user's drawing more than once (diagonal move of number from column to column is never repeated),</li>
+<li>no user is working on the same drawing more than once (rows),</li>
+<li>and no drawing is repeated in any turn (columns)</li>
+</ul>
+<p>The name of this structure is a <a href="#latin-squares">Latin Square</a>. Specifically, it is a <a href="#balanced-latin-squares">Balanced Latin Square</a>.</p>
+<h1 id="latin-squares"><a href="#latin-squares">Latin Squares</a></h1>
+<p>Latin squares are matrices of symbols, where each symbol appears exactly once in each row and column.</p>
+<p>The above example is one latin square, however they are not necessarily that random. For instance, the following is also a perfectly fine solution:</p>
+<div class="highlight"><pre><span></span>A | 1 2 3 4 |
+B | 2 3 4 1 |
+C | 3 4 1 2 |
+D | 4 1 2 3 |
+</pre></div>
+<p>This square just shifts each column one to the right for each row. This satisfies the requirements of the latin square perfectly, however in the context of a game where you are passing these symbols down the line is not ideal.</p>
+<p>This would be very boring for player A, since every turn they are continuing a drawing from player B. The same for B with respect to C, C with respect to D, and D with respect to A.</p>
+<h2 id="balanced-latin-squares"><a href="#balanced-latin-squares">Balanced Latin Squares</a></h2>
+<p>To maximize interaction between players, by making sure that each player gets to continue the drawing from each other player at least once, we want to implement a <strong>balanced</strong> latin square.</p>
+<p>A balanced latin square as seen in <a href="#the-problem">the intro</a> ensures that on top of being a valid latin square, the shift of a symbol from one row to another is never repeated.</p>
+<p>This gives us a solution like</p>
+<div class="highlight"><pre><span></span>A | 1 2 4 3 |
+B | 2 3 1 4 |
+C | 3 4 2 1 |
+D | 4 1 3 2 |
+</pre></div>
+<p>However, in the context of the turn orders of a game, there are two glaring issues with this solution:</p>
+<p><strong>1. Balanced latin squares must have an even number of symbols.</strong></p>
+<p>Note the following latin square. There is no solution where each player does not receive from another player two or more times.</p>
+<p>There are more sufficient solutions than the following, but it is an example of the mess that happens when you have an odd number:</p>
+<div class="highlight"><pre><span></span>A | 1 2 3 4 5 | receive order: B, E, C, B
+B | 2 4 1 5 3 | receive order: D, D, D, C
+C | 3 5 4 2 1 | receive order: E, B, E, E
+D | 4 1 5 3 2 | receive order: A, C, A, C
+E | 5 3 2 1 4 | receive order: C, A, B, A
+</pre></div>
+<p>The requirements of the latin square create a sort of deadlock that prevent the beautiful solution of "All rows get a symbol from each potential user".</p>
+<p><strong>2. Latin squares must be even in row and height</strong></p>
+<p>A latin square is an NxN sized grid. In the context of a game, we probably want to allow for configuration for more or fewer rounds.
+This means we might want fewer turns than we have players (not a problem), or more turns than we have players (un-balanceable).</p>
+<h2 id="nearly-balanced-latin-squares"><a href="#nearly-balanced-latin-squares">Nearly balanced Latin Squares</a></h2>
+<p>None of the above issues are actually mathematically solvable. You will always have repeats and holes. For a game, "close enough" is fine, so we want to make <em>nearly</em> balanced squares.</p>
+<h3 id="dealing-with-odd-numbered-grids">Dealing with odd-numbered grids</h3>
+<p>The issue with balancing odd number grids is unsolvable.</p>
+<p>Most places will state that in order to perfectly balance your odd-number latin square, you have to double the size of the square.</p>
+<p>In the context of a game turn order, this really doesn't make any sense. Instead, we just have to break a rule, and add an extra symbol or allow 1 repeat.</p>
+<ul>
+<li>Add 1 to the grid width. Calculate  the <code>n+1 x n</code> grid, and lop off the last column.</li>
+<li>This approach will give you n+1 symbols with no repeats.</li>
+<li>Remove 1 from the grid width. Calculate the <code>n-1 x n</code> grid, and then calculate a completely random last row that uses each symbol only once.</li>
+<li>This approach will give you n symbols with each symbol repeating exactly once. Receive order will also repeat up to n times, once-per-user.</li>
+</ul>
+<h3 id="deailing-with-tall-grids">Deailing with tall grids</h3>
+<div class="highlight"><pre><span></span>A | 1 3 2
+B | 2 1 4
+C | 3 4 1
+D | 4 2 3
+</pre></div>
+<p>A tall grid cannot meet the requirements of a latin grid, because there are more symbols than there are columns.</p>
+<p>The new rules in this case are the same as a regularly balanced latin square. Each symbol should appear exactly once per round. This is easily balanced using the same logic you would use for a regular even-numbered square.</p>
+<h3 id="dealing-with-wide-grids">Dealing with wide grids</h3>
+<div class="highlight"><pre><span></span>A | 1   3   2   4?
+B | 2   4?  1   3
+C | 3   2   4?  1
+</pre></div>
+<p>Wide grids are also deceptively simple. It is the inverse of the tall grid.</p>
+<p>There are two options from a game perspective: Either include extra symbols so that there is a symbol in every slot, or have only 3 symbols and include passes where the extra symbols would be.</p>
+<p>Where a tall grid will have each symbol appear <code>n=grid_width</code> times, the wide grid will have each symbol appear <code>n=grid_height</code> times. In other words, <em>in a rectangular grid, each symbol should show up as many times as the shortest grid dimension has entries</em>.</p>
+<h1 id="rust-implementation_2"><a href="#rust-implementation">Rust Implementation</a></h1>
+<p>With all of the above concidered, perfectly balanced latin squares are mysterious things that simply cannot be easily generated. There are three acceptable approaches for my specific use-case:</p>
+<ol>
+<li>Limit the number of players and rounds to something reasonable, so that we can just brute-force the solutions</li>
+<li>Implement Jacobson and Matthews approach, which won't garuntee perfection, but will generate random balanced-ish squares reliably</li>
+<li>Pre-emptive brute force: Use (1), or (2) with a post-check to see if its balanced, generate as many squares as we can up to reasonable dimensions. Include these as a fixture in the program and randomly select them</li>
+</ol>
+<p>For my purposes, I have decided to go with just (2) for now. I may write another post in the future if I decide to expand on it.</p>
+<p>The implementation can be found <a href="https://github.com/Checkroth/combinatorial_patterns">here</a>. It is mostly a re-implementation of <a href="https://github.com/bluemontag/igs-lsgp/blob/master/igs-lsgp/src/jacomatt/model/IncidenceCube.java">Ignacio Gallego Sagastume's C++ implementation</a>, though implemented in a way that will hopefully be re-usable. It is <a href="https://crates.io/crates/combinatorial_patterns">published on crates.io</a>.</p>
+<h1 id="sources"><a href="#sources">Sources</a></h1>
+<ul>
+<li><a href="https://onlinelibrary.wiley.com/doi/10.1002/(SICI)1520-6610(1996)4:6%3C405::AID-JCD3%3E3.0.CO;2-J">Generating uniformly distributed random latin squares, Mark T. Jacobson, Peter Matthews</a></li>
+<li><a href="http://sedici.unlp.edu.ar/bitstream/handle/10915/42155/Documento_completo.pdf?sequence=1">Generation of Random Latin Squares Step by Step and Graphically, Ignacio Gallego Sagastume</a></li>
+<li><a href="https://cs.uwaterloo.ca/~dmasson/tools/latin_square/">Balanced Latin Square Generator, Damien Masson</a></li>
+<li><a href="https://www.researchgate.net/publication/262752684_A_program_for_making_completely_balanced_Latin_Square_designs_employing_a_systemic_method">A program for making completely balanced Latin Square designs employing a systemic method, Beob Gyun Kim, Taemin Kim</a></li>
+<li><a href="https://math.stackexchange.com/questions/63131/generate-random-latin-squares">Generating random latin squares, StackOverflow</a></li>
+</ul>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://checkroth.com/tag/rust.html">rust</a>
+      <a href="https://checkroth.com/tag/mathematics.html">mathematics</a>
+      <a href="https://checkroth.com/tag/prettypileofbones.html">prettypileofbones</a>
+      <a href="https://checkroth.com/tag/devlog.html">devlog</a>
+    </p>
+  </div>
+
+
+
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle ads-responsive"
+         data-ad-client="ca-pub-3090577057275093"
+         data-ad-slot="6895080254"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+<!-- Disqus -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'checkroth';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+        Please enable JavaScript to view comments.
+
+</noscript>
+<!-- End Disqus -->
+</article>
+
+    <footer>
+<p>
+  &copy;  2021 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " software-and-stuff ",
+  "url" : "https://checkroth.com",
+  "image": "/images/me.jpg",
+  "description": "Blog and info"
+}
+</script>
+
+</body>
+</html>

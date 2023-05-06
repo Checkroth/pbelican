@@ -10,14 +10,14 @@
 
   <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
+    <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/stylesheet/style.min.css">
 
-  <link rel="stylesheet" type="text/css" href="/theme/pygments/colorful.min.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/fontawesome.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/brands.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/solid.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/pygments/colorful.min.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/solid.css">
 
-    <link href="/static/custom.css" rel="stylesheet">
+    <link href="https://checkroth.com/static/custom.css" rel="stylesheet">
 
 
 
@@ -44,25 +44,25 @@
     <meta name="msapplication-TileColor" content="#FFFFFF">
 
 <meta name="author" content="Charles Heckroth" />
-<meta name="description" content="Communicating politely and effictively with open source maintainers" />
+<meta name="description" content="*This blog entry is a work-in-progreses I recently saw a tweet that showcased extremely poor communication in a feature request for an open-source repository. It got me thinking: Sure this person could just be entitled and abrasive, but its more likely he just doesn&#39;t know how to communicate well to …" />
 <meta name="keywords" content="github, opensource, communication">
 
-<meta property="og:site_name" content="checkroth-site"/>
+<meta property="og:site_name" content="software-and-stuff"/>
 <meta property="og:title" content="Professional Open-Source Communication"/>
-<meta property="og:description" content="Communicating politely and effictively with open source maintainers"/>
+<meta property="og:description" content="*This blog entry is a work-in-progreses I recently saw a tweet that showcased extremely poor communication in a feature request for an open-source repository. It got me thinking: Sure this person could just be entitled and abrasive, but its more likely he just doesn&#39;t know how to communicate well to …"/>
 <meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="/prof-os-communication.html"/>
+<meta property="og:url" content="https://checkroth.com/prof-os-communication.html"/>
 <meta property="og:type" content="article"/>
 <meta property="article:published_time" content="2019-08-28 00:00:00+09:00"/>
 <meta property="article:modified_time" content=""/>
-<meta property="article:author" content="/author/charles-heckroth.html">
+<meta property="article:author" content="https://checkroth.com/author/charles-heckroth.html">
 <meta property="article:section" content="blog"/>
 <meta property="article:tag" content="github"/>
 <meta property="article:tag" content="opensource"/>
 <meta property="article:tag" content="communication"/>
 <meta property="og:image" content="/images/me.jpg">
 
-  <title>checkroth-site &ndash; Professional Open-Source Communication</title>
+  <title>software-and-stuff &ndash; Professional Open-Source Communication</title>
 
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script>
@@ -75,19 +75,18 @@
 <body>
   <aside>
     <div>
-      <a href="">
+      <a href="https://checkroth.com">
         <img src="/images/me.jpg" alt="Charles Henry Heckroth" title="Charles Henry Heckroth">
       </a>
-      <h1><a href="">Charles Henry Heckroth</a></h1>
+      <h1><a href="https://checkroth.com">Charles Henry Heckroth</a></h1>
 
 <p>My Notes & Blog</p>
       <nav>
         <ul class="list">
-          <li><a href="/#about-me">About Me</a></li>
+          <li><a href="https://checkroth.com/pages/about-me.html">About Me</a></li>
 
-          <li><a href="/blog_index.html" target="_blank">Blog</a></li>
+          <li><a href="https://checkroth.com/category/blog.html" target="_blank">Blog</a></li>
           <li><a href="https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view" target="_blank">Resume</a></li>
-          <li><a href="https://www.beproud.jp" target="_blank">BeProud</a></li>
         </ul>
       </nav>
 
@@ -132,10 +131,9 @@
   <main>
 
     <nav>
-      <a href="">    Home
+      <a href="https://checkroth.com">    Home
 </a>
 
-      <a href="/blog_index.html">Blog</a>
       <a href="/archives.html">Archives</a>
       <a href="/categories.html">Categories</a>
       <a href="/tags.html">Tags</a>
@@ -148,7 +146,7 @@
       
     <h1 id="prof-os-communication">Professional Open-Source Communication</h1>
     <p>
-          Posted on August 28, 2019 in <a href="/category/blog.html">blog</a>
+          Posted on August 28, 2019 in <a href="https://checkroth.com/category/blog.html">blog</a>
 
 
     </p>
@@ -156,10 +154,11 @@
 
 
   <div>
-    <p>*This blog entry is a work-in-progreses</p>
+    <!-- Summary: Communicating politely and effictively with open source maintainers -->
+<p>*This blog entry is a work-in-progreses</p>
 <p>I recently saw <a href="https://twitter.com/travisbrown/status/1165502986661105664">a tweet that showcased extremely poor communication</a> in a feature request for an open-source repository. It got me thinking: Sure this person could just be entitled and abrasive, but its more likely he just doesn't know how to communicate well to strangers on github.</p>
 <p>I want to break down how I communicate with project maintainers on Github (or whatever version contorl platform you use).</p>
-<h1>Basic Guidelines</h1>
+<h1 id="basic-guidelines">Basic Guidelines</h1>
 <ul>
 <li>Follow the rules for the project or community you want to interract with<ul>
 <li>If a project has rules or an issue template, follow it.</li>
@@ -186,14 +185,14 @@
 </ul>
 </li>
 </ul>
-<h1>The test case</h1>
+<h1 id="the-test-case">The test case</h1>
 <p>Let's take the tweet I linked above as a test case. My examples will assume that:</p>
 <p>I want the maintainer of a Scala project to publish for a newer version of the language because it is a dependency of another library that uses that version.</p>
 <p>What's wrong with the example ticket titled "Publish for Scala 2.13.x please"?</p>
 <p>There is basically no information in this ticket other than that the library in question is a dependency to another library.</p>
 <p>The title is not in a professional format -- it's a flat imperative request. The author assumes absolutely no responsibility for the request, assuming that asking for it will just be magically done.</p>
 <p>The ticket is selfish. The maintainer doesn't care what other libraries that depend on their own do. There's only one dependent listed in the ticket body which really implies that the dependent library should do something about it, not the dependee.</p>
-<h1>Opening an Issue</h1>
+<h1 id="opening-an-issue">Opening an Issue</h1>
 <p>An Issue on Github is how you track the conversation. This is where you make feature requests, report bugs, or inquire about the state of the project. You can open an issue on any repository on github, and this is where you start the conversation.</p>
 <p>Many github projects define an issue template with rules and guidelines for how to write a detailed issue. In these cases, you should always follow the template as much as humanly possible. Don't stray from templates, they exist for a reason.</p>
 <p>If there isn't an issue template, you should by default include basic necessary information, cleanly formatted.</p>
@@ -201,21 +200,21 @@
 <li>The request: "Publish Project for Scala 2.13"</li>
 <li>The reason: "Supporting newer versions of scala allowing newer projects to depend on this library"</li>
 <li>What you've done yourself: Outline what you've actually tried on your own to prove that your first response to an error wasn't to open an issue on Github.</li>
-<li>An example of the reason: "Running a project on Scala 2.13 with Eff will throw <error details>, caused by this project"</li>
+<li>An example of the reason: "Running a project on Scala 2.13 with Eff will throw <error details="">, caused by this project"</error></li>
 <li>Extra examples if possible: Chances are you aren't the only one with the issue. Find another example to show that you aren't the only one struggling.</li>
 </ul>
-<h1>Opening a Pull Request</h1>
+<h1 id="opening-a-pull-request">Opening a Pull Request</h1>
 <p>If possible, you should fork the repository you are opening a ticket to and try to fix the problem yourself. Add a link to your pull request in the ticket. The best way to get a feature implemented in an open source project is to do it yourself.</p>
 <p>If you can't fix the code yourself, that's OK. Some issues are complex and outside of your area of expertise. In this case, explain that in the Issue you opened. Let them know that you tried (and what you did), but that you aren't likely to be able to solve it yourself.</p>
 <p>If you couldn't fix the issue, you can probably still reproduce the issue. Create a pull request that adds a failing test to the project that shows whatever you're talking about in detail and makes it possible to ensure that if a fix is implemented, it solves the problem.</p>
-<h1>Deailing with a dead or low priority project</h1>
+<h1 id="deailing-with-a-dead-or-low-priority-project">Deailing with a dead or low priority project</h1>
 <p>Some projects aren't very active. Some projects were made by people who aren't around anymore. Maybe they changed careers, or went to prison, or passed away. Or maybe they just don't care about that project enough to work on it anymore.</p>
-<h2>Contacting the maintainer</h2>
+<h2 id="contacting-the-maintainer">Contacting the maintainer</h2>
 <p>WARNING: Do not contact maintainers who state they do not want to be contacted. As a general rule, only contact them if they have contact info listed <em>on github</em>.</p>
 <p>You can contact the maintainer of a dead project directly. Give them a nudge to look at your ticket (especially if you've already implemented the fix &amp; opened a PR). If they have no interest in maintaining the project, see if they are willing to transfer ownership of the project to you!</p>
 <p>If you do contact them, make sure you've given a reasonable amount of time for them to respond first. DO NOT tweet at a developer as soon as you open a pull request. Wait a week or two before resorting to personal contact. This sort of action can very easily slide over the line in to harrassment. Do not contact them more than once.</p>
 <p>I've had success in the past getting pull requests merge by pinging the developer on Twitter. Sometimes they're just not looking. Maybe they're on vacation or something. A notification on a platform they're more actively using is often enough of a push.</p>
-<h2>Forking the project</h2>
+<h2 id="forking-the-project">Forking the project</h2>
 <p>Forking projects is necessary to make a pull request to an open sorce project.</p>
 <p>However, if a repository is completely dead with no hope of transfer of ownership, you want to "fork" the repository in to a new project where <em>you</em> are the maintainer.</p>
 <p>The standard Fork functionality on github won't do the trick -- this makes your project hidden behind the main, dead repository.</p>
@@ -232,9 +231,9 @@
   </div>
   <div class="tag-cloud">
     <p>
-      <a href="/tag/github.html">github</a>
-      <a href="/tag/opensource.html">opensource</a>
-      <a href="/tag/communication.html">communication</a>
+      <a href="https://checkroth.com/tag/github.html">github</a>
+      <a href="https://checkroth.com/tag/opensource.html">opensource</a>
+      <a href="https://checkroth.com/tag/communication.html">communication</a>
     </p>
   </div>
 
@@ -268,7 +267,7 @@
 
     <footer>
 <p>
-  &copy;  2019 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+  &copy;  2021 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
 </p>
 <p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
 </p><p>
@@ -292,10 +291,10 @@
 {
   "@context" : "http://schema.org",
   "@type" : "Blog",
-  "name": " checkroth-site ",
-  "url" : "",
+  "name": " software-and-stuff ",
+  "url" : "https://checkroth.com",
   "image": "/images/me.jpg",
-  "description": "My Blog"
+  "description": "Blog and info"
 }
 </script>
 

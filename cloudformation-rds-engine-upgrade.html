@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="" />
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/stylesheet/style.min.css">
+
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/pygments/colorful.min.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/fontawesome.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/brands.css">
+  <link rel="stylesheet" type="text/css" href="https://checkroth.com/theme/font-awesome/css/solid.css">
+
+    <link href="https://checkroth.com/static/custom.css" rel="stylesheet">
+
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-136401999-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#FFFFFF">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#FFFFFF">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Microsoft EDGE -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+
+<meta name="author" content="Charles Heckroth" />
+<meta name="description" content="I manage all of my AWS infrastructure with Cloudformation, and have for several years. While this is usually very helpful, sometimes there are snags with one of the many AWS services and how cloudformation attempts to interact with them. Upgrading my database version was one of these. This post outlines …" />
+<meta name="keywords" content="aws, rds, infrastructure, devlog">
+
+<meta property="og:site_name" content="software-and-stuff"/>
+<meta property="og:title" content="Upgrading a Cloudformation-managed RDS Instance Engine"/>
+<meta property="og:description" content="I manage all of my AWS infrastructure with Cloudformation, and have for several years. While this is usually very helpful, sometimes there are snags with one of the many AWS services and how cloudformation attempts to interact with them. Upgrading my database version was one of these. This post outlines …"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:url" content="https://checkroth.com/cloudformation-rds-engine-upgrade.html"/>
+<meta property="og:type" content="article"/>
+<meta property="article:published_time" content="2023-04-19 00:00:00+09:00"/>
+<meta property="article:modified_time" content="2023-04-19 00:00:00+09:00"/>
+<meta property="article:author" content="https://checkroth.com/author/charles-heckroth.html">
+<meta property="article:section" content="blog"/>
+<meta property="article:tag" content="aws"/>
+<meta property="article:tag" content="rds"/>
+<meta property="article:tag" content="infrastructure"/>
+<meta property="article:tag" content="devlog"/>
+<meta property="og:image" content="/images/me.jpg">
+
+  <title>software-and-stuff &ndash; Upgrading a Cloudformation-managed RDS Instance Engine</title>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-3090577057275093",
+      enable_page_level_ads: true
+    });
+  </script>
+</head>
+<body>
+  <aside>
+    <div>
+      <a href="https://checkroth.com">
+        <img src="/images/me.jpg" alt="Charles Henry Heckroth" title="Charles Henry Heckroth">
+      </a>
+      <h1><a href="https://checkroth.com">Charles Henry Heckroth</a></h1>
+
+<p>My Notes & Blog</p>
+      <nav>
+        <ul class="list">
+          <li><a href="https://checkroth.com/pages/about-me.html">About Me</a></li>
+
+          <li><a href="https://checkroth.com/category/blog.html" target="_blank">Blog</a></li>
+          <li><a href="https://drive.google.com/file/d/1HLklPEKD8CMGnUfddLsOewxYlIfioJxq/view" target="_blank">Resume</a></li>
+        </ul>
+      </nav>
+
+      <ul class="social">
+          <li>
+            <a  class="sc-envelope" href="mailto:checkroth@gmail.com" target="_blank">
+            <i class="fas fa-envelope">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-github" href="https://www.github.com/Checkroth" target="_blank">
+            <i class="fab fa-github">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-linkedin" href="https://www.linkedin.com/in/charlesheckroth" target="_blank">
+            <i class="fab fa-linkedin">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-twitter" href="http://www.twitter.com/checkroth" target="_blank">
+            <i class="fab fa-twitter">
+            </i>
+          </a></li>
+          <li>
+            <a  class="sc-stack-overflow" href="https://stackoverflow.com/users/1037971/charles" target="_blank">
+            <i class="fab fa-stack-overflow">
+            </i>
+          </a></li>
+      </ul>
+    </div>
+
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <ins class="adsbygoogle ads-aside"
+           data-ad-client="ca-pub-3090577057275093"
+           data-ad-slot="7734708573"></ins>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+
+  </aside>
+  <main>
+
+    <nav>
+      <a href="https://checkroth.com">    Home
+</a>
+
+      <a href="/archives.html">Archives</a>
+      <a href="/categories.html">Categories</a>
+      <a href="/tags.html">Tags</a>
+
+
+    </nav>
+
+<article class="single">
+  <header>
+      
+    <h1 id="cloudformation-rds-engine-upgrade">Upgrading a Cloudformation-managed RDS Instance Engine</h1>
+    <p>
+          Posted on April 19, 2023 in <a href="https://checkroth.com/category/blog.html">blog</a>
+
+
+    </p>
+  </header>
+
+
+  <div>
+    <p>I manage all of my AWS infrastructure with Cloudformation, and have for several years. While this is usually very helpful, sometimes there are snags with one of the many AWS services and how cloudformation attempts to interact with them.</p>
+<p>Upgrading my database version was one of these. This post outlines how I upgraded my in-use postgres database from 11 to 15 with a mix of manual operations and cloudformation changeset deployments.</p>
+<h1 id="the-details">The Details</h1>
+<p>I have an RDS instance and its parameter group managed by Cloudformation (among other things, but the use-case here is simplified).</p>
+<p>This instance has been in operation for a number of years, and is using Postgres11, which is on its way out the door this year. I want to upgrade my database, but I don't want a significant desync with cloudformation. I want to ensure that I can upgrade my database and continue to manage with cloudformation safely.</p>
+<h1 id="the-problem">The Problem</h1>
+<p>Below is a sample from my configuration. Most properties have been omitted, because the real configuration is very long. So I have left just the bare minimum.</p>
+<div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">DBParameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS::RDS::DBParameterGroup</span>
+<span class="w">    </span><span class="nt">Properties</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="s">"DB</span><span class="nv"> </span><span class="s">setetings"</span>
+<span class="w">      </span><span class="nt">Family</span><span class="p">:</span><span class="w"> </span><span class="s">"postgres11"</span>
+<span class="w">      </span><span class="nt">Parameters</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">log_statement</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ddl</span>
+<span class="w">        </span><span class="nt">log_min_duration_statement</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+
+<span class="w">  </span><span class="nt">DB</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS::RDS::DBInstance</span>
+<span class="w">    </span><span class="nt">Properties</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">DBParameterGroupName</span><span class="p">:</span><span class="w"> </span><span class="kt">!Ref</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DBParameters</span>
+<span class="w">      </span><span class="nt">EnableCloudwatchLogsExports</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"postgresql"</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"upgrade"</span>
+<span class="w">      </span><span class="nt">EnablePerformanceInsights</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">      </span><span class="nt">Engine</span><span class="p">:</span><span class="w"> </span><span class="s">"postgres"</span>
+<span class="w">      </span><span class="nt">MultiAZ</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">      </span><span class="nt">Port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span>
+<span class="w">      </span><span class="nt">PubliclyAccessible</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">      </span><span class="nt">StorageType</span><span class="p">:</span><span class="w"> </span><span class="s">"gp2"</span>
+</pre></div>
+<p>My first attempt to fix this is to simply change <code>DBParameters::Properties::Family</code> to <code>postgres14</code> and execute the cloudformation changeset. This simply doesn't work. I don't really know why, but I could not find a way to actually enact this change via cloudformation (Maybe if you specify the minor version in <code>DB::Properties::EngineVersion</code>, but I don't really want to do that.)</p>
+<h1 id="the-solution">The Solution</h1>
+<h2 id="manual-execution">Manual Execution</h2>
+<p>Ultimately, I just upgraded the database manually.</p>
+<ol>
+<li>Open the database in the RDS console</li>
+<li>Click "Modify" in the top-right corner</li>
+<li>Change the DB Engine Version to the latest of whatever family you want.</li>
+<li>"Additional Configuration" section should also be upgraded to the correct family</li>
+<li>Execute the upgrade</li>
+</ol>
+<p>This could take around 30 minutes to finish. It will incur downtime when the database actually restarts.
+In a future post, I will outline my approach to tracking downtime from major infrastructure changes to appropriately plan scheduled maintenance in production environments.</p>
+<h2 id="catching-up-with-cloudformation">Catching Up with CloudFormation</h2>
+<p>WARNING: This step ALSO will incur downtime. To sync up, the DBParameterGroup must be recreated, which requires a database restart. When upgrading manually, the parameter group is set set to "default".</p>
+<p>Below is the updated config. All that has changed is <code>DBParameters::Properties::Family</code> from <code>postgres11</code> to <code>postgres14</code>.</p>
+<p>Simply execute the changeset as you would any other changeset.</p>
+<p>In my case, I execute</p>
+<div class="highlight"><pre><span></span>aws cloudformation deploy \
+  --template-file template.yaml \
+  --stack-name my-stack-develop \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides Env=develop \
+  --no-execute-changeset
+</pre></div>
+<p>and then confirm the changeset &amp; manually execute in the Cloudformation console.</p>
+<div class="highlight"><pre><span></span><span class="w">  </span><span class="nt">DBParameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS::RDS::DBParameterGroup</span>
+<span class="w">    </span><span class="nt">Properties</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="s">"DB</span><span class="nv"> </span><span class="s">setetings"</span>
+<span class="w">      </span><span class="nt">Family</span><span class="p">:</span><span class="w"> </span><span class="s">"postgres14"</span>
+<span class="w">      </span><span class="nt">Parameters</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">log_statement</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ddl</span>
+<span class="w">        </span><span class="nt">log_min_duration_statement</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+
+<span class="w">  </span><span class="nt">DB</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">AWS::RDS::DBInstance</span>
+<span class="w">    </span><span class="nt">Properties</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">DBParameterGroupName</span><span class="p">:</span><span class="w"> </span><span class="kt">!Ref</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">DBParameters</span>
+<span class="w">      </span><span class="nt">EnableCloudwatchLogsExports</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"postgresql"</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">"upgrade"</span>
+<span class="w">      </span><span class="nt">EnablePerformanceInsights</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">      </span><span class="nt">Engine</span><span class="p">:</span><span class="w"> </span><span class="s">"postgres"</span>
+<span class="w">      </span><span class="nt">MultiAZ</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">      </span><span class="nt">Port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5432</span>
+<span class="w">      </span><span class="nt">PubliclyAccessible</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<span class="w">      </span><span class="nt">StorageType</span><span class="p">:</span><span class="w"> </span><span class="s">"gp2"</span>
+</pre></div>
+<h2 id="future-effects">Future Effects</h2>
+<p>As far as I can tell, once the manual execution &amp; cloudformation follow-up have been completed, there are no more issues. Ultimately, it is the same state that you would expect to be in if the original idea of "Just execute the changeset with a new family" worked.</p>
+<h1 id="things-that-didnt-work_1">Things that didn't work</h1>
+<p>I tried a few approaches before reaching the solution. Obviously, they all didn't work or they would be the solution.</p>
+<ol>
+<li>Just changing family to 14 and executing the changeset -&gt; this doesn't work, as described above.</li>
+<li>Specifying <code>DBParameterGroupName</code> to trigger a complete re-creation of the parameter group. This still triggers the same issue</li>
+<li>Trying other versions of postgres -- perhaps the issue was that my instance simply didn't support postgres14. This was not the case.</li>
+</ol>
+<p>The last option that I didn't bother attempting because it doesn't meet my needs, was to also specify <code>DBEngineVersion</code> in the <code>DBInstance</code> itself, to force the DBInstance and DBParameterGroup to match. I don't have much faith that this solution would work either.</p>
+  </div>
+  <div class="tag-cloud">
+    <p>
+      <a href="https://checkroth.com/tag/aws.html">aws</a>
+      <a href="https://checkroth.com/tag/rds.html">rds</a>
+      <a href="https://checkroth.com/tag/infrastructure.html">infrastructure</a>
+      <a href="https://checkroth.com/tag/devlog.html">devlog</a>
+    </p>
+  </div>
+
+
+
+
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle ads-responsive"
+         data-ad-client="ca-pub-3090577057275093"
+         data-ad-slot="6895080254"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+
+<!-- Disqus -->
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'checkroth';
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>
+        Please enable JavaScript to view comments.
+
+</noscript>
+<!-- End Disqus -->
+</article>
+
+    <footer>
+<p>
+  &copy;  2021 - This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>
+</p>
+<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
+</p><p>
+  <a rel="license"
+     href="http://creativecommons.org/licenses/by-sa/4.0/"
+     target="_blank">
+    <img alt="Creative Commons License"
+         title="Creative Commons License"
+         style="border-width:0"
+           src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png"
+         width="80"
+         height="15"/>
+  </a>
+</p>    </footer>
+  </main>
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Blog",
+  "name": " software-and-stuff ",
+  "url" : "https://checkroth.com",
+  "image": "/images/me.jpg",
+  "description": "Blog and info"
+}
+</script>
+
+</body>
+</html>

@@ -44,25 +44,25 @@
     <meta name="msapplication-TileColor" content="#FFFFFF">
 
 <meta name="author" content="Charles Heckroth" />
-<meta name="description" content="Roping in Complexity, Decay, and Duplication in a Growing Scala Project All software projects will grow in complexity and decay over time. Lehman&#39;s Laws of software evolution state that as a system evolves, &#34;its complexity increases unless work is done to maintain or reduce it&#34;, and that a system &#34;must …" />
-<meta name="keywords" content="scala, conference, scalamatsuri">
+<meta name="description" content="The Problem easy_thumbnails is a handy library for automatically resizing &amp; storing various sizes of an image. As the name implies, it is an easy way to create thumbnails for images in your django project so you don&#39;t have to use massive original-size images for tiny thumbnail displays. It does however …" />
+<meta name="keywords" content="python, django, filestorage">
 
 <meta property="og:site_name" content="software-and-stuff"/>
-<meta property="og:title" content="Roping in Complexity, Decay, and Duplication in a Growing Scala Project"/>
-<meta property="og:description" content="Roping in Complexity, Decay, and Duplication in a Growing Scala Project All software projects will grow in complexity and decay over time. Lehman&#39;s Laws of software evolution state that as a system evolves, &#34;its complexity increases unless work is done to maintain or reduce it&#34;, and that a system &#34;must …"/>
+<meta property="og:title" content="Django Easy Thumbnailer URLs from Filepaths"/>
+<meta property="og:description" content="The Problem easy_thumbnails is a handy library for automatically resizing &amp; storing various sizes of an image. As the name implies, it is an easy way to create thumbnails for images in your django project so you don&#39;t have to use massive original-size images for tiny thumbnail displays. It does however …"/>
 <meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="https://checkroth.com/2017-scala-matsuri-cfp.html"/>
+<meta property="og:url" content="https://checkroth.com/drafts/easy-thumbnails-from-path.html"/>
 <meta property="og:type" content="article"/>
-<meta property="article:published_time" content="2016-09-13 00:00:00+09:00"/>
+<meta property="article:published_time" content="2020-10-21 00:00:00+09:00"/>
 <meta property="article:modified_time" content=""/>
 <meta property="article:author" content="https://checkroth.com/author/charles-heckroth.html">
 <meta property="article:section" content="blog"/>
-<meta property="article:tag" content="scala"/>
-<meta property="article:tag" content="conference"/>
-<meta property="article:tag" content="scalamatsuri"/>
+<meta property="article:tag" content="python"/>
+<meta property="article:tag" content="django"/>
+<meta property="article:tag" content="filestorage"/>
 <meta property="og:image" content="/images/me.jpg">
 
-  <title>software-and-stuff &ndash; Roping in Complexity, Decay, and Duplication in a Growing Scala Project</title>
+  <title>software-and-stuff &ndash; Django Easy Thumbnailer URLs from Filepaths</title>
 
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script>
@@ -144,9 +144,9 @@
 <article class="single">
   <header>
       
-    <h1 id="2017-scala-matsuri-cfp">Roping in Complexity, Decay, and Duplication in a Growing Scala Project</h1>
+    <h1 id="easy-thumbnails-from-path">Django Easy Thumbnailer URLs from Filepaths</h1>
     <p>
-          Posted on September 13, 2016 in <a href="https://checkroth.com/category/blog.html">blog</a>
+          Posted on October 21, 2020 in <a href="https://checkroth.com/category/blog.html">blog</a>
 
 
     </p>
@@ -154,24 +154,36 @@
 
 
   <div>
-    <!-- Summary: This was my (unaccepted) proposal to Scala Matsuri 2017. -->
-<h1 id="roping-in-complexity-decay-and-duplication-in-a-growing-scala-project">Roping in Complexity, Decay, and Duplication in a Growing Scala Project</h1>
-<p>All software projects will grow in complexity and decay over time. 
-<a href="https://en.wikipedia.org/wiki/Lehman's_laws_of_software_evolution">Lehman's Laws</a> of software evolution state that as a system evolves, "its complexity increases unless work is done to maintain or reduce it", and that a system "must be continually adapted or it becomes progressively less satisfactory".</p>
-<p>Scala has a lot of tools to help combat complexity and decay. I will cover my own process of spotting decaying components of our system, and how my team and I apply functional programming concepts to grow our system without wide-spread, unmaintainable complexity growth.
-Specifically, how we define and practice standards within our group of engineers and how I utilized Shapeless and HLists to remove heavy code duplication.</p>
-<p>I will briefly touch on the following specific topics:
-- Scalaz and Functional Syntax as a standard
-- Code formatting with Scalafmt
-- Common structures vs. Copied Code
-- Doing it right the first time
-- Removing duplicated code using Shapeless</p>
+    <h1 id="the-problem">The Problem</h1>
+<p><a href="https://github.com/SmileyChris/easy-thumbnails">easy_thumbnails</a> is a handy library for automatically resizing &amp; storing various sizes of an image. As the name implies, it is an easy way to create thumbnails for images in your django project so you don't have to use massive original-size images for tiny thumbnail displays.</p>
+<p>It does however come with its problems, particularly with the amount of queries it executes. It's handy for processing single instances, but when you have a list of hundreds of objects the use of easy_thumbnail's template filters is going to throw out <em>a lot</em> of unnecessary queries. At least one, often more than one, for every object. This is going to make page rendering painfully slow, so it should be avoided.</p>
+<p>In django you would generally avoid this by using features like <code>prefetch_related</code> and <code>values_list</code> to get the information you need in one go, but you can't use easy_thumbnail's features with these standard Django ORM functions. </p>
+<p>So if you want to get a list of the urls for a thumbnail size for a model, given a model like:</p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">ThumbnailerImageField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s2">"images/"</span><span class="p">)</span>
+</pre></div>
+<p>You would have to get your thumbanils like this:</p>
+<div class="highlight"><pre><span></span><span class="n">thumbnails</span> <span class="o">=</span> <span class="p">[</span><span class="n">get_thumbnailer</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">image</span><span class="p">)[</span><span class="s1">'mysize'</span><span class="p">]</span><span class="o">.</span><span class="n">rul</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">MyModel</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()]</span>
+</pre></div>
+<p>But that's going to execute a query for every object and is no better than just using the built-in template filter.</p>
+<p>And <code>MyModel.objects.values_list('image', flat=True)</code> is only going to give you the name of each image -- not the object you need for using easy_thumbnails <code>get_thumbnailer</code>.</p>
+<p>So <em>how can we get a list of thumbnail URLs</em>?</p>
+<h1 id="the-solution">The Solution</h1>
+<p>To get a list of thumbnail urls without executing a query for each instance of your object, you need to trick easy_thumbnails in to <em>thinking</em> it has an instance of each object, when really you just have a list of file names.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">easy_thumbnails.files</span> <span class="kn">import</span> <span class="n">ThumbnailerImageFieldFile</span>
+<span class="kn">from</span> <span class="nn">easy_thumbnails.files</span> <span class="kn">import</span> <span class="n">get_thumbnailer</span>
+
+<span class="n">throwaway_object</span> <span class="o">=</span> <span class="n">MyModel</span><span class="p">()</span>
+
+<span class="n">thumbnails</span> <span class="o">=</span> <span class="p">(</span><span class="n">get_thumbnailer</span><span class="p">(</span><span class="n">ThumbnailerImageFieldFile</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">throwaway_object</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="n">throwaway_object</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="n">filename</span><span class="p">))[</span><span class="s1">'size'</span><span class="p">]</span><span class="o">.</span><span class="n">url</span>
+              <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">MyObject</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">'image'</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
   </div>
   <div class="tag-cloud">
     <p>
-      <a href="https://checkroth.com/tag/scala.html">scala</a>
-      <a href="https://checkroth.com/tag/conference.html">conference</a>
-      <a href="https://checkroth.com/tag/scalamatsuri.html">scalamatsuri</a>
+      <a href="https://checkroth.com/tag/python.html">python</a>
+      <a href="https://checkroth.com/tag/django.html">django</a>
+      <a href="https://checkroth.com/tag/filestorage.html">filestorage</a>
     </p>
   </div>
 
