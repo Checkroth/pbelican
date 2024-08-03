@@ -4,3 +4,6 @@
 [submodule "plugins/pelican-toc"]
 	path = plugins/pelican-toc
 	url = git@github.com:ingwinlu/pelican-toc.git
+[submodule "plugins/strava-runmap"]
+	path = plugins/strava-runmap
+	url = git@github.com:Checkroth/strava-runmap.git

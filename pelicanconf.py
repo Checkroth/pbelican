@@ -20,7 +20,7 @@ PYGMENTS_STYLE = 'colorful'
 TIMEZONE = 'Japan'
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['pelican-toc']
+PLUGINS = ['pelican-toc', 'strava_runmap']
 
 
 I18N_TEMPLATES_LANG = 'en'
@@ -118,4 +118,11 @@ TOC = {
                                      # to 'true' no toc will be generated
 
     'TOC_INCLUDE_TITLE': 'true',     # If 'true' include title in toc
+}
+
+STRAVA_RUNMAP = {
+    "CLIENT_ID": os.getenv("STRAVA_RUNMAP_CLIENT_ID"),
+    "CLIENT_SECRET": os.getenv("STRAVA_RUNMAP_CLIENT_SECRET"),
+    "REFRESH_TOKEN": os.getenv("STRAVA_RUNMAP_REFRESH_TOKEN"),
+    "STRAVA_DRY_RUN": False
 }
