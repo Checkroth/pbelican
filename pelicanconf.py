@@ -19,7 +19,7 @@ PYGMENTS_STYLE = 'colorful'
 
 TIMEZONE = 'Japan'
 
-PLUGIN_PATHS = ['plugins']
+PLUGIN_PATHS = ['plugins', 'plugins/strava-runmap/pelican/plugins']
 PLUGINS = ['pelican-toc', 'strava_runmap']
 
 
