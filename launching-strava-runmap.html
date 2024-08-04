@@ -44,12 +44,12 @@
     <meta name="msapplication-TileColor" content="#FFFFFF">
 
 <meta name="author" content="Charles Heckroth" />
-<meta name="description" content="I lifted a neat activity visualization from my colleague James Van Dyne (with permission), an re-implemented it as a Pelican plugin to mix in with my site, and make it easy for others to do the same. The Visualization The visualization is a neat thing that my colleague James Van …" />
+<meta name="description" content="I lifted a neat activity visualization from my colleague James Van Dyne (with permission), an re-implemented it as a Pelican plugin to mix in with my site, and make it easy for others to do the same. It can be seen on the strava runmap section of this site The …" />
 <meta name="keywords" content="pelican, python, strava">
 
 <meta property="og:site_name" content="software-and-stuff"/>
 <meta property="og:title" content="Strava Runmap: A new Pelican Plugin"/>
-<meta property="og:description" content="I lifted a neat activity visualization from my colleague James Van Dyne (with permission), an re-implemented it as a Pelican plugin to mix in with my site, and make it easy for others to do the same. The Visualization The visualization is a neat thing that my colleague James Van …"/>
+<meta property="og:description" content="I lifted a neat activity visualization from my colleague James Van Dyne (with permission), an re-implemented it as a Pelican plugin to mix in with my site, and make it easy for others to do the same. It can be seen on the strava runmap section of this site The …"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:url" content="https://checkroth.com/launching-strava-runmap.html"/>
 <meta property="og:type" content="article"/>
@@ -156,6 +156,7 @@
 
   <div>
     <p>I lifted a neat activity visualization from my colleague James Van Dyne (with permission), an re-implemented it as a Pelican plugin to mix in with my site, and make it easy for others to do the same.</p>
+<p>It can be seen on the <a href="https://checkroth.com/pages/strava-runmap.html">strava runmap section of this site</a></p>
 <h1 id="the-visualization">The Visualization</h1>
 <p>The visualization is a neat thing that my colleague James Van Dyne did <a href="https://jamesvandyne.com/runs/">on his Tanzawa Blog</a>.</p>
 <p>It uses the python package <a href="https://pypi.org/project/polyline/">polyline</a>, and takes coordinate data from the <a href="https://developers.strava.com/docs/reference/">strava api</a> to turn them in to the little line maps.</p>
@@ -167,11 +168,11 @@
 <p>The plugin will, every time you build your pelican site, authenticate with the Strava API and pull every activitity you have ever recorded. It's not particularly performant and will probably slow down your build process.</p>
 <p>I only have a few hundred activities (I don't exercise that much and didn't start using Strava until a couple years ago). This process might be unbearable for some users of the plugin, sorry.</p>
 <h2 id="2-polyline-svg-generation">2: Polyline svg generation</h2>
-<p>The part explained above. Once we have strava activities, we turn them in to SVGs represented in python strings.</p>
+<p>The part explained above. Once we have strava activities, we turn them in to SVGs represented as strings.</p>
 <p>These are stored in a context that keeps the svg data and other relevant metadata from Strava, and groups them by year (for display purposes)</p>
 <h2 id="3-page-generation">3: Page Generation</h2>
-<p>Once we have all the SVG and related metadata, we generate a full "content" section to include in a pelican page, and inject that page in to the list using a hook in to pelican's pages generator.</p>
-<p>The page content is at this moment, raw HTML built with a little bit of python. The styles are minimal (just flexbox for layout and a little bit of styling), and are all written in-line, in strings, in python.</p>
+<p>Once we have all the SVGs and related metadata, we generate a full "content" section to include in a pelican page, and inject that page in to the list using a hook in to pelican's pages generator.</p>
+<p>The page content is at this moment raw HTML built with a little bit of python. The styles are minimal (primarily flexbox for layout), and are all written in-line, in strings, in python.</p>
 <h1 id="temporary-usage-until-its-published_1">Temporary Usage Until Its Published</h1>
 <p>It has yet to be published on pypi or adopted in to pelican plugins -- there are a few dangling tasks for the plugin in general. This means it cannot be installed normally as a pelican plugin without a small bit of tinkering:</p>
 <ol>
